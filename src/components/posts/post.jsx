@@ -7,7 +7,9 @@ class Post extends Component {
     this.state = {
       trackAlbumArtUrl: null,
       trackTitle: null,
-      trackArtist: null
+      trackArtist: null,
+      trackAlbum: null,
+      displayWidget: false
     };
   }
 
@@ -22,7 +24,8 @@ class Post extends Component {
         this.setState({
           trackAlbumArtUrl: result.album.images[1].url,
           trackTitle: result.name,
-          trackArtist: result.artists[0].name
+          trackArtist: result.artists[0].name,
+          trackAlbum: result.album.name
         });
       })
       .catch(err => {
@@ -42,40 +45,58 @@ class Post extends Component {
 
     fetch(`/api/posts/${this.props.postID}`, {
       method: "DELETE"
+    }).then(() => {
+      this.props.refresh();
     });
+  };
 
-    this.props.refresh();
+  handleFameClick = () => {
+    this.setState({ displayWidget: !this.state.displayWidget });
   };
 
   render() {
     return (
-      <div className="post">
-        <div className="frame">
-          <img src={this.state.trackAlbumArtUrl} alt="" />
-        </div>
-        <div className="info">
-          <p className="description">{this.props.description}</p>
-          <div className="meta">
-            <div>
-              <h2>{this.state.trackTitle}</h2>
-              <h3>{this.state.trackArtist}</h3>
+      <div>
+        <div className="post">
+          <div className="frame" onClick={this.handleFameClick}>
+            {/* <a
+              href={`https://open.spotify.com/track/${this.props.song}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={this.state.trackAlbumArtUrl} alt="" />
+            </a> */}
+            <img src={this.state.trackAlbumArtUrl} alt="" />
+          </div>
+          <div className="info">
+            <p className="description">{this.props.description}</p>
+            <div className="meta">
+              <div>
+                <h2>{this.state.trackTitle}</h2>
+                <h3>
+                  {this.state.trackArtist} • {this.state.trackAlbum}
+                </h3>
+              </div>
             </div>
-            {/* <iframe
-              src={`https://open.spotify.com/embed/track/${this.props.song}`}
-              width="80"
-              height="80"
-              frameborder="0"
-              allowtransparency="true"
-              allow="encrypted-media"
-            ></iframe> */}
-          </div>
-          <div className="buttons">
-            <button className="btn btn-secondary">View Comments</button>
-            <button className="btn btn-danger" onClick={this.handleDelete}>
-              DELETE
-            </button>
+            <div className="buttons">
+              <button className="btn btn-secondary">View Comments</button>
+              <button className="btn btn-danger" onClick={this.handleDelete}>
+                DELETE
+              </button>
+            </div>
           </div>
         </div>
+        {this.state.displayWidget && (
+          <iframe
+            src={`https://open.spotify.com/embed/track/${this.props.song}`}
+            title={this.props.song}
+            width="100%"
+            height="80"
+            frameBorder="0"
+            allowtransparency="true"
+            allow="encrypted-media"
+          ></iframe>
+        )}
       </div>
     );
   }

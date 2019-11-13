@@ -8,17 +8,11 @@ class Posts extends Component {
     super();
     this.state = {
       posts: [],
-      token: null
+      token: null,
+      numPosts: 5,
+      pageNumber: 0
     };
-    this.refreshPosts = this.refreshPosts.bind(this);
-  }
-
-  refreshPosts() {
-    fetch("/api/posts")
-      .then(res => res.json())
-      .then(posts =>
-        this.setState({ posts }, () => console.log("Posts fetched...", posts))
-      );
+    // this.refreshPosts = this.refreshPosts.bind(this);
   }
 
   componentDidMount() {
@@ -29,11 +23,41 @@ class Posts extends Component {
       .then(tokenRes => this.setState({ token: tokenRes.access_token }));
   }
 
+  refreshPosts = () => {
+    fetch(`/api/posts/page/${this.state.numPosts}/${this.state.pageNumber}`)
+      .then(res => res.json())
+      .then(posts =>
+        this.setState({ posts }, () =>
+          console.log(
+            `${this.state.numPosts} posts fetched on page ${this.state.pageNumber}`,
+            posts
+          )
+        )
+      );
+  };
+
+  handlePreviousPage = () => {
+    if (this.state.pageNumber > 0) {
+      const previousPage = this.state.pageNumber - 1;
+      this.setState({ pageNumber: previousPage }, () => {
+        this.refreshPosts();
+      });
+    }
+  };
+
+  handleNextPage = () => {
+    const nextPage = this.state.pageNumber + 1;
+    this.setState({ pageNumber: nextPage }, () => {
+      this.refreshPosts();
+    });
+  };
+
   render() {
     return (
       <div className="postsSection">
-        <h2>Posts</h2>
-        <NewPost refresh={this.refreshPosts} />
+        <h1>Posts</h1>
+        <NewPost refresh={this.refreshPosts} token={this.state.token} />
+
         <div className="postsContainer">
           {this.state.posts.map(post => (
             <Post
@@ -46,9 +70,21 @@ class Posts extends Component {
             />
           ))}
         </div>
-        {/* <button className="btn btn-primary" onClick={this.handleAddPost}>
-          Add Post
-        </button> */}
+
+        <div className="pageNav">
+          <button
+            className="btn btn-secondary"
+            onClick={this.handlePreviousPage}
+          >
+            Previous Page
+          </button>
+
+          <h4>page {this.state.pageNumber + 1}</h4>
+
+          <button className="btn btn-secondary" onClick={this.handleNextPage}>
+            Next Page
+          </button>
+        </div>
       </div>
     );
   }

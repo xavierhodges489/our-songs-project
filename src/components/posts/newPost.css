@@ -1,0 +1,8 @@
+.postOrCancel {
+  display: flex;
+  justify-content: space-between;
+}
+
+.postOrCancel .btn {
+  width: 48%;
+}

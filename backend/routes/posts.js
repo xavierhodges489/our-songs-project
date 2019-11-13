@@ -5,7 +5,7 @@ const { poolPromise } = require("./db");
 router.route("/").get((req, res) => {
   poolPromise
     .then(pool => {
-      return pool.request().query("SELECT * FROM POSTS");
+      return pool.request().query("SELECT * FROM POSTS ORDER BY PostID DESC");
     })
     .then(result => {
       res.json(result.recordset);
@@ -25,6 +25,25 @@ router.route("/:id").get((req, res) => {
     .then(result => {
       if (result.recordset.length < 1)
         res.status(404).send("there is no post with that id");
+      res.json(result.recordset);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+router.route("/page/:numPosts/:pageNumber").get((req, res) => {
+  poolPromise
+    .then(pool => {
+      return pool.request().query(`
+            SELECT * 
+            FROM POSTS 
+            ORDER BY PostID DESC
+            OFFSET ${req.params.pageNumber * req.params.numPosts} ROWS
+            FETCH NEXT ${req.params.numPosts} ROWS ONLY
+            `);
+    })
+    .then(result => {
       res.json(result.recordset);
     })
     .catch(err => {
