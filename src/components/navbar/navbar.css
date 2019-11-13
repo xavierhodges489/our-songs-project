@@ -1,0 +1,28 @@
+.navbar {
+  display: flex;
+  padding: 15px 200px;
+  border-bottom: black solid 2px;
+  background: white;
+}
+
+.navbar h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.navbar .btn-secondary {
+  width: 150px;
+  margin: 0 10px;
+}
+
+.logged {
+  display: flex;
+}
+
+.logged-in {
+  display: flex;
+}
+
+.logged-out {
+  display: flex;
+}

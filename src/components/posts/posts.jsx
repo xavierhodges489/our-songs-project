@@ -12,7 +12,6 @@ class Posts extends Component {
       numPosts: 5,
       pageNumber: 0
     };
-    // this.refreshPosts = this.refreshPosts.bind(this);
   }
 
   componentDidMount() {
@@ -54,11 +53,11 @@ class Posts extends Component {
 
   render() {
     return (
-      <div className="postsSection">
+      <div className="posts-section">
         <h1>Posts</h1>
         <NewPost refresh={this.refreshPosts} token={this.state.token} />
 
-        <div className="postsContainer">
+        <div className="posts-container">
           {this.state.posts.map(post => (
             <Post
               key={post.PostID}
