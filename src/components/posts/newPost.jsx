@@ -15,7 +15,6 @@ class NewPost extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-
     this.setState({
       results: [],
       postSong: "",
@@ -30,7 +29,8 @@ class NewPost extends Component {
       },
       body: JSON.stringify({
         PostDescription: e.target[1].value,
-        PostSong: e.target[0].value
+        PostSong: e.target[0].value,
+        UserID: this.props.UserID
       })
     })
       .then(() => {
@@ -127,7 +127,11 @@ class NewPost extends Component {
               />
             </div>
             <div className="postOrCancel">
-              <button className="btn btn-primary" onClick={this.handleCancel}>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={this.handleCancel}
+              >
                 Cancel
               </button>
               <input className="btn btn-primary" type="submit" value="Post" />

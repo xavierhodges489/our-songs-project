@@ -55,7 +55,13 @@ class Posts extends Component {
     return (
       <div className="posts-section">
         <h1>Posts</h1>
-        <NewPost refresh={this.refreshPosts} token={this.state.token} />
+        {this.props.isLoggedIn && (
+          <NewPost
+            refresh={this.refreshPosts}
+            token={this.state.token}
+            UserID={this.props.UserID}
+          />
+        )}
 
         <div className="posts-container">
           {this.state.posts.map(post => (
@@ -65,6 +71,8 @@ class Posts extends Component {
               refresh={this.refreshPosts}
               description={post.PostDescription}
               song={post.PostSong}
+              UserID={post.UserID}
+              currentUserID={this.props.UserID}
               token={this.state.token}
             />
           ))}

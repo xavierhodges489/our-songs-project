@@ -70,15 +70,16 @@ router.route("/:id").delete((req, res) => {
 router.route("/").post((req, res) => {
   const post = {
     PostDescription: req.body.PostDescription,
-    PostSong: req.body.PostSong
+    PostSong: req.body.PostSong,
+    UserID: req.body.UserID
   };
 
   poolPromise
     .then(pool => {
       return pool.request().query(
-        `INSERT INTO POSTS (PostDescription, PostSong)
+        `INSERT INTO POSTS (PostDescription, PostSong, UserID)
           VALUES
-            ('${post.PostDescription}', '${post.PostSong}')`
+            ('${post.PostDescription}', '${post.PostSong}', ${post.UserID})`
       );
     })
     .then(result => {

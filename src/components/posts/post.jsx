@@ -80,9 +80,11 @@ class Post extends Component {
             </div>
             <div className="buttons">
               <button className="btn btn-secondary">View Comments</button>
-              <button className="btn btn-danger" onClick={this.handleDelete}>
-                DELETE
-              </button>
+              {this.props.UserID === this.props.currentUserID && (
+                <button className="btn btn-danger" onClick={this.handleDelete}>
+                  DELETE
+                </button>
+              )}
             </div>
           </div>
         </div>

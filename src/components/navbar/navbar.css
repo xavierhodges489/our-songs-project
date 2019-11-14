@@ -1,8 +1,13 @@
 .navbar {
-  display: flex;
-  padding: 15px 200px;
+  padding: 0;
   border-bottom: black solid 2px;
   background: white;
+  justify-content: center;
+}
+
+.navbar .container {
+  margin: 10px 0;
+  width: 60%;
 }
 
 .navbar h1 {
@@ -12,7 +17,7 @@
 
 .navbar .btn-secondary {
   width: 150px;
-  margin: 0 10px;
+  margin-left: 20px;
 }
 
 .logged {

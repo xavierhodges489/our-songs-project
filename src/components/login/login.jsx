@@ -1,11 +1,41 @@
 import React, { Component } from "react";
 
-class Login extends Component {
-  state = {};
+class LogIn extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isBadLogIn: false,
+      badLogInMessage: ""
+    };
+  }
 
-  handleSubmit = () => {};
+  handleSubmit = e => {
+    e.preventDefault();
 
-  handleBack = () => {};
+    fetch("/api/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        UserName: e.target[0].value,
+        Password: e.target[1].value
+      })
+    })
+      .then(res => res.json())
+      .then(user => {
+        if (user.length > 0)
+          this.props.handleLogIn(user[0].UserID, user[0].Username);
+        else
+          this.setState({
+            isBadLogIn: true,
+            badLogInMessage: "username or password is incorrect"
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   render() {
     return (
@@ -36,9 +66,18 @@ class Login extends Component {
               id="password"
             />
           </div>
+          {this.state.isBadLogIn && (
+            <label className="form-text text-warning" htmlFor="username">
+              {this.state.badLogInMessage}
+            </label>
+          )}
 
           <div className="postOrCancel">
-            <button className="btn btn-primary" onClick={this.handleCancel}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={this.props.handleLogInOpenClose}
+            >
               Cancel
             </button>
             <input className="btn btn-primary" type="submit" value="Submit" />
@@ -49,4 +88,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default LogIn;

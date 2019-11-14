@@ -19,15 +19,17 @@ class SignUp extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        PassWord: e.target[1].value,
-        UserName: e.target[0].value
+        UserName: e.target[0].value,
+        Password: e.target[1].value
       })
-    }).catch(err => {
-      console.log(err);
-    });
+    })
+      .then(() => {
+        this.props.handleSignUpOpenClose();
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
-
-  handleBack = () => {};
 
   render() {
     return (
@@ -60,7 +62,11 @@ class SignUp extends Component {
           </div>
 
           <div className="postOrCancel">
-            <button className="btn btn-primary" onClick={this.handleCancel}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={this.props.handleSignUpOpenClose}
+            >
               Cancel
             </button>
             <input className="btn btn-primary" type="submit" value="Submit" />
