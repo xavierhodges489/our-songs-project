@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./post.css";
+import "./post.scss";
 
 class Post extends Component {
   constructor() {
@@ -55,7 +55,7 @@ class Post extends Component {
     return (
       <div>
         <div className="post">
-          <div className="framex" onClick={this.handleFameClick}>
+          <div className="frame" onClick={this.handleFameClick}>
             <img src={this.state.trackAlbumArtUrl} alt="" />
           </div>
           <div className="info">

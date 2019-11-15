@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import "bootswatch/dist/cosmo/bootstrap.min.css";
-import "./App.css";
+import "./App.scss";
 import Posts from "./components/posts/posts";
 import Navbar from "./components/navbar/navbar";
 import Comments from "./components/comments/comments";

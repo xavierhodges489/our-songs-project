@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Track from "./track";
-import "./newPost.css";
+import "./newPost.scss";
 
 class NewPost extends Component {
   constructor() {
