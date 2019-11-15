@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import "./track.css";
 
 class Track extends Component {

@@ -40,9 +40,6 @@ class Post extends Component {
   }
 
   handleDelete = () => {
-    // event.preventDefault();
-    // const data = new FormData(event.target);
-
     fetch(`/api/posts/${this.props.postID}`, {
       method: "DELETE"
     }).then(() => {

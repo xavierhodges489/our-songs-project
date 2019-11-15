@@ -36,7 +36,7 @@ router.route("/page/:numPosts/:pageNumber").get((req, res) => {
   poolPromise
     .then(pool => {
       return pool.request().query(`
-            SELECT PostDescription, PostSong, POSTS.UserID, UserName 
+            SELECT PostID, PostDescription, PostSong, POSTS.UserID, UserName 
             FROM POSTS 
                 JOIN USERS ON (POSTS.UserID = USERS.UserID)
             ORDER BY PostID DESC
