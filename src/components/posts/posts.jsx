@@ -72,6 +72,7 @@ class Posts extends Component {
               description={post.PostDescription}
               song={post.PostSong}
               UserID={post.UserID}
+              UserName={post.UserName}
               currentUserID={this.props.UserID}
               token={this.state.token}
             />

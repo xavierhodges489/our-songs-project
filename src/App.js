@@ -5,8 +5,9 @@ import "./App.css";
 import Posts from "./components/posts/posts";
 import Navbar from "./components/navbar/navbar";
 import Comments from "./components/comments/comments";
-import LogIn from "./components/login/login";
-import SignUp from "./components/login/signUp";
+import LogIn from "./components/users/login";
+import SignUp from "./components/users/signUp";
+import Welcome from "./components/users/welcome";
 
 class App extends Component {
   constructor() {
@@ -15,6 +16,7 @@ class App extends Component {
       isLoggedIn: false,
       UserID: -1,
       Username: "",
+      isWelcoming: false,
       isSigningUp: false,
       isLoggingIn: false,
       isViewingPosts: true,
@@ -28,6 +30,15 @@ class App extends Component {
       isViewingPosts: !this.state.isViewingPosts && !this.state.isLoggingIn,
       isLoggingIn: false
     });
+  };
+
+  handleSignUp = UserName => {
+    this.setState({ Username: UserName, isWelcoming: true });
+    this.handleSignUpOpenClose();
+  };
+
+  handleWelcomeGoBack = () => {
+    this.setState({ isWelcoming: false, Username: "" });
   };
 
   handleLogIn = (UserID, Username) => {
@@ -58,6 +69,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        {this.state.isWelcoming && (
+          <Welcome
+            UserName={this.state.Username}
+            handleWelcomeGoBack={this.handleWelcomeGoBack}
+          />
+        )}
         <Navbar
           Username={this.state.Username}
           isLoggedIn={this.state.isLoggedIn}
@@ -67,7 +84,10 @@ class App extends Component {
         />
         <div className="container">
           {this.state.isSigningUp && (
-            <SignUp handleSignUpOpenClose={this.handleSignUpOpenClose} />
+            <SignUp
+              handleSignUpOpenClose={this.handleSignUpOpenClose}
+              handleSignUp={this.handleSignUp}
+            />
           )}
           {this.state.isLoggingIn && (
             <LogIn
@@ -80,6 +100,7 @@ class App extends Component {
             <Posts
               isLoggedIn={this.state.isLoggedIn}
               UserID={this.state.UserID}
+              UserName={this.state.UserName}
             />
           )}
         </div>

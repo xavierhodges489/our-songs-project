@@ -58,18 +58,14 @@ class Post extends Component {
     return (
       <div>
         <div className="post">
-          <div className="frame" onClick={this.handleFameClick}>
-            {/* <a
-              href={`https://open.spotify.com/track/${this.props.song}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img src={this.state.trackAlbumArtUrl} alt="" />
-            </a> */}
+          <div className="framex" onClick={this.handleFameClick}>
             <img src={this.state.trackAlbumArtUrl} alt="" />
           </div>
           <div className="info">
-            <p className="description">{this.props.description}</p>
+            <div className="user-info">
+              <h2 className="description">{this.props.description}</h2>
+              <p className="username">Posted by {this.props.UserName}</p>
+            </div>
             <div className="meta">
               <div>
                 <h2>{this.state.trackTitle}</h2>

@@ -1,17 +1,16 @@
 import React, { Component } from "react";
 
 class SignUp extends Component {
-  state = {};
+  constructor() {
+    super();
+    this.state = {
+      isBadSignUp: false,
+      badSignUpMessage: ""
+    };
+  }
 
   handleSubmit = e => {
     e.preventDefault();
-
-    // this.setState({
-    //   results: [],
-    //   postSong: "",
-    //   postDescription: "",
-    //   isMakingNew: false
-    // });
 
     fetch("/api/users/signup", {
       method: "POST",
@@ -23,8 +22,18 @@ class SignUp extends Component {
         Password: e.target[1].value
       })
     })
-      .then(() => {
-        this.props.handleSignUpOpenClose();
+      .then(res => {
+        if (res.status === 200) return res.json();
+        else {
+          this.setState({
+            isBadSignUp: true,
+            badSignUpMessage: "Username Taken"
+          });
+          return Promise.reject();
+        }
+      })
+      .then(user => {
+        this.props.handleSignUp(user.UserName);
       })
       .catch(err => {
         console.log(err);
@@ -60,7 +69,11 @@ class SignUp extends Component {
               id="password"
             />
           </div>
-
+          {this.state.isBadSignUp && (
+            <label className="form-text text-warning" htmlFor="username">
+              {this.state.badSignUpMessage}
+            </label>
+          )}
           <div className="postOrCancel">
             <button
               type="button"

@@ -9,6 +9,10 @@ class LogIn extends Component {
     };
   }
 
+  handleOnChange = () => {
+    this.setState({ isBadLogIn: false, badLogInMessage: "" });
+  };
+
   handleSubmit = e => {
     e.preventDefault();
 
@@ -22,15 +26,18 @@ class LogIn extends Component {
         Password: e.target[1].value
       })
     })
-      .then(res => res.json())
-      .then(user => {
-        if (user.length > 0)
-          this.props.handleLogIn(user[0].UserID, user[0].Username);
-        else
+      .then(res => {
+        if (res.status === 200) return res.json();
+        else {
           this.setState({
             isBadLogIn: true,
-            badLogInMessage: "username or password is incorrect"
+            badLogInMessage: "Incorrect Login"
           });
+          return Promise.reject();
+        }
+      })
+      .then(user => {
+        this.props.handleLogIn(user[0].UserID, user[0].Username);
       })
       .catch(err => {
         console.log(err);
@@ -47,6 +54,7 @@ class LogIn extends Component {
               Enter Username
             </label>
             <input
+              onChange={this.handleOnChange}
               className="form-control"
               type="text"
               name="username"
@@ -59,6 +67,7 @@ class LogIn extends Component {
               Enter Password
             </label>
             <input
+              onChange={this.handleOnChange}
               className="form-control"
               type="password"
               name="password"
