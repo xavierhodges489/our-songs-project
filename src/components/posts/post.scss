@@ -5,6 +5,10 @@
   border-bottom: solid 1px rgb(211, 211, 211);
   display: flex;
 
+  @media screen and (max-device-width: 480px) {
+    flex-direction: column;
+  }
+
   .frame {
     height: 180px;
     padding: 10px;
@@ -21,6 +25,16 @@
     }
   }
 
+  @media screen and (max-device-width: 480px) {
+    .frame {
+      height: 100%;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+
   .info {
     width: 100%;
     min-height: 180px;
@@ -33,6 +47,12 @@
     .user-info {
       display: flex;
       justify-content: space-between;
+    }
+
+    @media screen and (max-device-width: 480px) {
+      .user-info {
+        flex-direction: column;
+      }
     }
 
     .description {
@@ -64,5 +84,19 @@
 
   .buttons {
     display: flex;
+  }
+
+  @media screen and (max-device-width: 480px) {
+    .buttons {
+      flex-direction: column;
+    }
+
+    .btn {
+      margin: 5px 0;
+    }
+
+    .btn-danger {
+      width: 100%;
+    }
   }
 }
