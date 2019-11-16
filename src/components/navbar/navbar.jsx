@@ -7,7 +7,8 @@ class Navbar extends Component {
     return (
       <div className="navbar">
         <div className="container">
-          <h1>OurSongs</h1>
+          {/* <h1>OurSongs</h1> */}
+          <img className="logo" src="/logowordmark.svg" alt="our songs logo" />
           <div className="logged">
             {this.props.isLoggedIn ? (
               <div className="logged-in">

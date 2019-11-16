@@ -9,13 +9,13 @@
   padding: 0;
 }
 
-@media screen and (max-device-width: 1200px) {
+@media screen and (max-width: 1200px) {
   .container {
     width: 75%;
   }
 }
 
-@media screen and (max-device-width: 480px) {
+@media screen and (max-width: 480px) {
   .container {
     width: 100%;
     padding: 0 15px;

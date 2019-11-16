@@ -31,10 +31,10 @@ class Post extends Component {
       .catch(err => {
         console.log(err);
         this.setState({
-          trackAlbumArtUrl:
-            "https://raw.githubusercontent.com/xavierhodges489/MusicPlayer/master/MusicPlayer/MusicPlayer/bin/album_art/unknown.jpg",
+          trackAlbumArtUrl: "/unknownTrack.jpg",
           trackTitle: "[unknown track]",
-          trackArtist: "[unkown artist]"
+          trackArtist: "[unkown artist]",
+          trackAlbum: "[unknown album]"
         });
       });
   }

@@ -9,7 +9,7 @@ class Track extends Component {
         onClick={() => this.props.trackClick(this.props.id)}
       >
         <div className="frame">
-          <img src={this.props.trackAlbumArtUrl} alt="" />
+          <img src={this.props.trackAlbumArtUrl} alt={this.props.trackTitle} />
         </div>
 
         <div className="meta">

@@ -7,6 +7,7 @@ class Welcome extends Component {
     return (
       <div className="welcome">
         <div className="container">
+          <img src="/icon.svg" alt="our songs logo" />
           <h1>Welcome, {this.props.UserName}</h1>
           <p>Log in to make posts and comments.</p>
           <button
