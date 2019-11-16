@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 
 const app = express();
@@ -13,6 +14,10 @@ const usersRouter = require("./routes/users");
 app.use("/api/posts", postsRouter);
 app.use("/api/token", spotifyTokenRouter);
 app.use("/api/users", usersRouter);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
+});
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
