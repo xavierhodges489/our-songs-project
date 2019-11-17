@@ -13,8 +13,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      token:
-        "BQC0D-jRDWYOalKhIk7Yydg8_c8rR3bjvPAWTQjEOf673C5OUPh83oa_x1FUuxqgTQK1JOxc7pZ7AJXpbWQ",
+      token: "",
       isLoggedIn: false,
       UserID: -1,
       Username: "",
@@ -34,12 +33,12 @@ class App extends Component {
     };
   }
 
-  // componentDidMount() {
-  //   fetch("/api/token")
-  //     .then(res => res.json())
-  //     .then(tokenRes => this.setState({ token: tokenRes.access_token }))
-  //     .then(this.setState({ isViewingPosts: true }));
-  // }
+  componentDidMount() {
+    fetch("/api/token")
+      .then(res => res.json())
+      .then(tokenRes => this.setState({ token: tokenRes.access_token }))
+      .then(this.setState({ isViewingPosts: true }));
+  }
 
   handleSignUpOpen = () => {
     this.setState({
