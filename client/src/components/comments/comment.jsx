@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import "./post.scss";
+import "./comment.scss";
 
-class Post extends Component {
+class Comment extends Component {
   constructor() {
     super();
     this.state = {
@@ -40,7 +40,7 @@ class Post extends Component {
   }
 
   handleDelete = () => {
-    fetch(`/api/posts/${this.props.postID}`, {
+    fetch(`/api/comments/${this.props.CommentID}`, {
       method: "DELETE"
     }).then(() => {
       this.props.refresh();
@@ -54,23 +54,11 @@ class Post extends Component {
   render() {
     return (
       <div>
-        <div className="post">
+        <div className="comment">
           <div className="frame" onClick={this.handleFameClick}>
             <img src={this.state.trackAlbumArtUrl} alt="" />
           </div>
           <div className="info">
-            <div className="user-info">
-              <h2
-                className={
-                  this.props.isViewingComments
-                    ? "description bigger"
-                    : "description"
-                }
-              >
-                {this.props.description}
-              </h2>
-              <p className="username">Posted by {this.props.UserName}</p>
-            </div>
             <div className="meta">
               <div>
                 <h2>{this.state.trackTitle}</h2>
@@ -78,33 +66,16 @@ class Post extends Component {
                   {this.state.trackArtist} • {this.state.trackAlbum}
                 </h3>
               </div>
-            </div>
-            {!this.props.isViewingComments && (
-              <div className="buttons">
-                <button
-                  className="btn btn-secondary"
-                  onClick={() =>
-                    this.props.handleViewComments({
-                      UserName: this.props.UserName,
-                      PostID: this.props.postID,
-                      PostSong: this.props.song,
-                      PostDescription: this.props.description,
-                      pageNumber: this.props.pageNumber
-                    })
-                  }
-                >
-                  View Comments ({this.props.numComments})
+              {this.props.UserID === this.props.currentUserID && (
+                <button className="btn btn-danger" onClick={this.handleDelete}>
+                  DELETE
                 </button>
-                {this.props.UserID === this.props.currentUserID && (
-                  <button
-                    className="btn btn-danger"
-                    onClick={this.handleDelete}
-                  >
-                    DELETE
-                  </button>
-                )}
-              </div>
-            )}
+              )}
+            </div>
+            <div className="user-info">
+              <h2 className="description">{this.props.description}</h2>
+              <p className="username">Commented by {this.props.UserName}</p>
+            </div>
           </div>
         </div>
         {this.state.displayWidget && (
@@ -123,4 +94,4 @@ class Post extends Component {
   }
 }
 
-export default Post;
+export default Comment;

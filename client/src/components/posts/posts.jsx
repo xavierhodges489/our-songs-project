@@ -8,18 +8,15 @@ class Posts extends Component {
     super();
     this.state = {
       posts: [],
-      token: null,
       numPosts: 5,
       pageNumber: 0
     };
   }
 
   componentDidMount() {
-    this.refreshPosts();
-
-    fetch("/api/token")
-      .then(res => res.json())
-      .then(tokenRes => this.setState({ token: tokenRes.access_token }));
+    this.setState({ pageNumber: this.props.pageNumber }, () =>
+      this.refreshPosts()
+    );
   }
 
   refreshPosts = () => {
@@ -58,7 +55,7 @@ class Posts extends Component {
         {this.props.isLoggedIn && (
           <NewPost
             refresh={this.refreshPosts}
-            token={this.state.token}
+            token={this.props.token}
             UserID={this.props.UserID}
           />
         )}
@@ -73,15 +70,23 @@ class Posts extends Component {
               song={post.PostSong}
               UserID={post.UserID}
               UserName={post.UserName}
+              numComments={post.numComments}
               currentUserID={this.props.UserID}
-              token={this.state.token}
+              token={this.props.token}
+              handleViewComments={this.props.handleViewComments}
+              isViewingComments={this.props.isViewingComments}
+              pageNumber={this.state.pageNumber}
             />
           ))}
         </div>
 
         <div className="pageNav">
           <button
-            className="btn btn-secondary"
+            className={
+              this.state.pageNumber === 0
+                ? "btn btn-secondary muted"
+                : "btn btn-secondary"
+            }
             onClick={this.handlePreviousPage}
           >
             Previous Page

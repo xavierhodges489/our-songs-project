@@ -34,14 +34,31 @@ router.route("/:id").get((req, res) => {
 
 router.route("/page/:numPosts/:pageNumber").get((req, res) => {
   poolPromise
+    // .then(pool => {
+    //   return pool.request().query(`
+    //         SELECT PostID, PostDescription, PostSong, POSTS.UserID, UserName
+    //         FROM POSTS
+    //             JOIN USERS ON (POSTS.UserID = USERS.UserID)
+    //         ORDER BY PostID DESC
+    //         OFFSET ${req.params.pageNumber * req.params.numPosts} ROWS
+    //         FETCH NEXT ${req.params.numPosts} ROWS ONLY
+    //         `);
+    // })
+
     .then(pool => {
       return pool.request().query(`
-            SELECT PostID, PostDescription, PostSong, POSTS.UserID, UserName 
-            FROM POSTS 
-                JOIN USERS ON (POSTS.UserID = USERS.UserID)
-            ORDER BY PostID DESC
-            OFFSET ${req.params.pageNumber * req.params.numPosts} ROWS
-            FETCH NEXT ${req.params.numPosts} ROWS ONLY
+        SELECT SUB.PostID, PostDescription, PostSong, SUB.UserID, UserName, COUNT(COMMENTS.PostID) AS numComments
+        FROM COMMENTS
+        RIGHT JOIN (
+          SELECT POSTS.PostID, PostDescription, PostSong, POSTS.UserID, UserName
+          FROM POSTS 
+            JOIN USERS ON (POSTS.UserID = USERS.UserID)
+          ORDER BY PostID DESC
+          OFFSET ${req.params.pageNumber * req.params.numPosts} ROWS
+          FETCH NEXT ${req.params.numPosts} ROWS ONLY
+          ) SUB
+          ON COMMENTS.PostID = SUB.PostID
+        GROUP BY SUB.PostID, PostDescription, PostSong, SUB.UserID, UserName
             `);
     })
     .then(result => {

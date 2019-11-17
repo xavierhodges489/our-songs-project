@@ -1,4 +1,4 @@
-.post {
+.comment {
   width: 100%;
   min-height: 180px;
 
@@ -61,11 +61,6 @@
       margin: 0;
     }
 
-    .bigger {
-      font-size: 1.8rem;
-      width: 70%;
-    }
-
     .viewComments {
       font-size: 1rem;
       margin: 0;
@@ -76,6 +71,7 @@
 
   .meta {
     display: flex;
+    justify-content: space-between;
 
     h2 {
       font-size: 1rem;
@@ -84,6 +80,11 @@
     h3 {
       font-size: 1rem;
       font-weight: 300;
+    }
+
+    .btn-danger {
+      height: 40px;
+      width: 90px;
     }
   }
 

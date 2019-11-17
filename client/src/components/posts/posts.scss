@@ -23,6 +23,15 @@
       font-weight: 500;
     }
 
+    .muted {
+      color: rgb(197, 197, 197);
+      border: solid rgb(197, 197, 197) 2px;
+    }
+
+    .muted:hover {
+      background-color: transparent;
+    }
+
     @media screen and (max-width: 480px) {
       .btn-secondary {
         width: 130px;

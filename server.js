@@ -10,10 +10,12 @@ app.use(express.json());
 const postsRouter = require("./routes/posts");
 const spotifyTokenRouter = require("./routes/spotifyToken");
 const usersRouter = require("./routes/users");
+const commentsRouter = require("./routes/comments");
 
 app.use("/api/posts", postsRouter);
 app.use("/api/token", spotifyTokenRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/comments", commentsRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));

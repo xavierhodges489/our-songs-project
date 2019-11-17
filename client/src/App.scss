@@ -7,18 +7,19 @@
   margin-top: 50px;
   margin-bottom: 50px;
   padding: 0;
-}
 
-@media screen and (max-width: 1200px) {
-  .container {
+  @media screen and (max-width: 1200px) {
     width: 75%;
   }
-}
 
-@media screen and (max-width: 480px) {
-  .container {
+  @media screen and (max-width: 480px) {
     width: 100%;
     padding: 0 15px;
+  }
+
+  .go-back-comments {
+    width: 160px;
+    margin: 10px;
   }
 }
 

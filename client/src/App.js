@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "bootswatch/dist/cosmo/bootstrap.min.css";
 import "./App.scss";
 import Posts from "./components/posts/posts";
+import Post from "./components/posts/post";
 import Navbar from "./components/navbar/navbar";
 import Comments from "./components/comments/comments";
 import LogIn from "./components/users/login";
@@ -12,6 +13,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      token: null,
       isLoggedIn: false,
       UserID: -1,
       Username: "",
@@ -19,15 +21,39 @@ class App extends Component {
       isSigningUp: false,
       isLoggingIn: false,
       isViewingPosts: true,
-      isViewingComments: false
+      isViewingComments: false,
+
+      commentsData: {
+        UserName: "",
+        PostID: -1,
+        PostSong: "",
+        PostDescription: "",
+        pageNumber: 0
+      }
     };
   }
 
-  handleSignUpOpenClose = () => {
+  componentDidMount() {
+    fetch("/api/token")
+      .then(res => res.json())
+      .then(tokenRes => this.setState({ token: tokenRes.access_token }));
+  }
+
+  handleSignUpOpen = () => {
     this.setState({
-      isSigningUp: !this.state.isSigningUp,
-      isViewingPosts: !this.state.isViewingPosts && !this.state.isLoggingIn,
-      isLoggingIn: false
+      isSigningUp: true,
+      isViewingPosts: false,
+      isLoggingIn: false,
+      isViewingComments: false
+    });
+  };
+
+  handleSignUpClose = () => {
+    this.setState({
+      isSigningUp: false,
+      isViewingPosts: true,
+      isLoggingIn: false,
+      isViewingComments: false
     });
   };
 
@@ -60,11 +86,43 @@ class App extends Component {
     });
   };
 
-  handleLogInOpenClose = () => {
+  handleLogInOpen = () => {
     this.setState({
-      isLoggingIn: !this.state.isLoggingIn,
-      isViewingPosts: !this.state.isViewingPosts && !this.state.isSigningUp,
-      isSigningUp: false
+      isLoggingIn: true,
+      isViewingPosts: false,
+      isSigningUp: false,
+      isViewingComments: false
+    });
+  };
+
+  handleLogInClose = () => {
+    this.setState({
+      isLoggingIn: false,
+      isViewingPosts: true,
+      isSigningUp: false,
+      isViewingComments: false
+    });
+  };
+
+  handleViewComments = e => {
+    this.setState({
+      isViewingPosts: false,
+      isViewingComments: true,
+      commentsData: {
+        UserName: e.UserName,
+        PostID: e.PostID,
+        PostSong: e.PostSong,
+        PostDescription: e.PostDescription,
+        pageNumber: e.pageNumber
+      }
+    });
+  };
+
+  handleGoBackComments = () => {
+    this.setState({
+      isViewingPosts: true,
+      isViewingComments: false,
+      commentsPostID: -1
     });
   };
 
@@ -80,29 +138,57 @@ class App extends Component {
         <Navbar
           Username={this.state.Username}
           isLoggedIn={this.state.isLoggedIn}
-          handleSignUpOpenClose={this.handleSignUpOpenClose}
-          handleLogInOpenClose={this.handleLogInOpenClose}
+          handleSignUpOpen={this.handleSignUpOpen}
+          handleLogInOpen={this.handleLogInOpen}
           handleLogOut={this.handleLogOut}
         />
         <div className="container">
           {this.state.isSigningUp && (
             <SignUp
-              handleSignUpOpenClose={this.handleSignUpOpenClose}
+              handleSignUpClose={this.handleSignUpClose}
               handleSignUp={this.handleSignUp}
             />
           )}
           {this.state.isLoggingIn && (
             <LogIn
-              handleLogInOpenClose={this.handleLogInOpenClose}
+              handleLogInClose={this.handleLogInClose}
               handleLogIn={this.handleLogIn}
             />
           )}
-          {this.state.isViewingComments && <Comments />}
+          {this.state.isViewingComments && (
+            <div>
+              <button
+                className="btn btn-secondary go-back-comments"
+                onClick={this.handleGoBackComments}
+              >
+                Go Back
+              </button>
+              <Post
+                UserName={this.state.commentsData.UserName}
+                PostID={this.state.commentsData.PostID}
+                song={this.state.commentsData.PostSong}
+                description={this.state.commentsData.PostDescription}
+                token={this.state.token}
+                isViewingComments={this.state.isViewingComments}
+              />
+              <Comments
+                isLoggedIn={this.state.isLoggedIn}
+                UserID={this.state.UserID}
+                UserName={this.state.commentsData.UserName}
+                PostID={this.state.commentsData.PostID}
+                handleGoBackComments={this.handleGoBackComments}
+                token={this.state.token}
+              />
+            </div>
+          )}
           {this.state.isViewingPosts && (
             <Posts
               isLoggedIn={this.state.isLoggedIn}
               UserID={this.state.UserID}
               UserName={this.state.UserName}
+              handleViewComments={this.handleViewComments}
+              isViewingComments={this.state.isViewingComments}
+              pageNumber={this.state.commentsData.pageNumber}
             />
           )}
         </div>

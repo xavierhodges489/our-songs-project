@@ -78,7 +78,7 @@ class SignUp extends Component {
             <button
               type="button"
               className="btn btn-primary"
-              onClick={this.props.handleSignUpOpenClose}
+              onClick={this.props.handleSignUpClose}
             >
               Cancel
             </button>

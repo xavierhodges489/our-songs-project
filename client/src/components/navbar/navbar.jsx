@@ -24,13 +24,13 @@ class Navbar extends Component {
               <div className="logged-out">
                 <button
                   className="btn btn-secondary"
-                  onClick={this.props.handleLogInOpenClose}
+                  onClick={this.props.handleLogInOpen}
                 >
                   Login
                 </button>
                 <button
                   className="btn btn-secondary"
-                  onClick={this.props.handleSignUpOpenClose}
+                  onClick={this.props.handleSignUpOpen}
                 >
                   Sign Up
                 </button>
