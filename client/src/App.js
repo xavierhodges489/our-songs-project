@@ -59,14 +59,11 @@ class App extends Component {
 
   handleSignUp = UserName => {
     this.setState({ Username: UserName, isWelcoming: true });
-    this.handleSignUpOpenClose();
+    this.handleSignUpClose();
   };
 
   handleWelcomeGoBack = () => {
-    this.setState(
-      { isWelcoming: false, Username: "" },
-      this.handleLogInOpenClose()
-    );
+    this.setState({ isWelcoming: false, Username: "" }, this.handleLogInOpen());
   };
 
   handleLogIn = (UserID, Username) => {
