@@ -9,36 +9,51 @@ class NewPost extends Component {
       results: [],
       postSong: "",
       postDescription: "",
-      isMakingNew: false
+      isMakingNew: false,
+      songToPost: "",
+      badPostSongMessage: "",
+      badPostDescriptionMessage: ""
     };
   }
 
   handleSubmit = e => {
     e.preventDefault();
-    this.setState({
-      results: [],
-      postSong: "",
-      postDescription: "",
-      isMakingNew: false
-    });
-
-    fetch("/api/posts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        PostDescription: e.target[1].value,
-        PostSong: e.target[0].value,
-        UserID: this.props.UserID
-      })
-    })
-      .then(() => {
-        this.props.refresh();
-      })
-      .catch(err => {
-        console.log(err);
+    if (this.state.songToPost === "") {
+      this.setState({
+        badPostSongMessage: "Please select a song"
       });
+    } else if (this.state.postDescription === "") {
+      this.setState({
+        badPostDescriptionMessage: "Posts must have a description"
+      });
+    } else {
+      fetch("/api/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          PostDescription: e.target[1].value,
+          PostSong: e.target[0].value,
+          UserID: this.props.UserID
+        })
+      })
+        .then(() => {
+          this.props.refresh();
+          this.setState({
+            results: [],
+            postSong: "",
+            postDescription: "",
+            isMakingNew: false,
+            songToPost: "",
+            badPostSongMessage: "",
+            badPostDescriptionMessage: ""
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   handleOnChange = e => {
@@ -64,7 +79,16 @@ class NewPost extends Component {
   };
 
   handleTrackClick = id => {
-    this.setState({ results: [], postSong: id });
+    const isTrack = element => element.id === id;
+    const selectedTrackIndex = this.state.results.findIndex(isTrack);
+    const selectedTrack = this.state.results[selectedTrackIndex];
+
+    this.setState({
+      results: [],
+      postSong: id,
+      songToPost: `${selectedTrack.name} by ${selectedTrack.artists[0].name}`,
+      badPostSongMessage: ""
+    });
   };
 
   handleCreateNewPost = () => {
@@ -76,7 +100,10 @@ class NewPost extends Component {
       results: [],
       postSong: "",
       postDescription: "",
-      isMakingNew: false
+      isMakingNew: false,
+      songToPost: "",
+      badPostSongMessage: "",
+      badPostDescriptionMessage: ""
     });
   };
 
@@ -87,7 +114,10 @@ class NewPost extends Component {
           <form onSubmit={this.handleSubmit}>
             <div className="form-group">
               <label className="form-text text-muted" htmlFor="PostSong">
-                Enter Spotify Track ID
+                Enter Spotify Track ID{" "}
+                {this.state.songToPost && (
+                  <span htmlFor="PostSong"> ({this.state.songToPost})</span>
+                )}
               </label>
               <input
                 onChange={this.handleOnChange}
@@ -97,6 +127,12 @@ class NewPost extends Component {
                 name="PostSong"
                 id="PostSong"
               />
+
+              {this.state.badPostSongMessage && (
+                <label className="form-text text-warning" htmlFor="PostSong">
+                  {this.state.badPostSongMessage}
+                </label>
+              )}
             </div>
             <div>
               {this.state.results.map(track => (
@@ -125,6 +161,14 @@ class NewPost extends Component {
                 name="PostDescription"
                 id="PostDescription"
               />
+              {this.state.badPostDescriptionMessage && (
+                <label
+                  className="form-text text-warning"
+                  htmlFor="PostDescription"
+                >
+                  {this.state.badPostDescriptionMessage}
+                </label>
+              )}
             </div>
             <div className="postOrCancel">
               <button

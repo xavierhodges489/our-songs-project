@@ -4,40 +4,45 @@ class SignUp extends Component {
   constructor() {
     super();
     this.state = {
-      isBadSignUp: false,
-      badSignUpMessage: ""
+      badUserNameMessage: "",
+      badPassWordMessage: "",
+      username: "",
+      password: ""
     };
   }
 
   handleSubmit = e => {
     e.preventDefault();
 
-    fetch("/api/users/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        UserName: e.target[0].value,
-        Password: e.target[1].value
+    if (this.state.username === "") {
+      this.setState({ badUserNameMessage: "Must have a username" });
+    } else if (this.state.password === "") {
+      this.setState({ badPassWordMessage: "Must have a password" });
+    } else {
+      fetch("/api/users/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          UserName: e.target[0].value,
+          Password: e.target[1].value
+        })
       })
-    })
-      .then(res => {
-        if (res.status === 200) return res.json();
-        else {
-          this.setState({
-            isBadSignUp: true,
-            badSignUpMessage: "Username Taken"
-          });
-          return Promise.reject();
-        }
-      })
-      .then(user => {
-        this.props.handleSignUp(user.UserName);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+        .then(res => {
+          if (res.status === 200) return res.json();
+          else {
+            this.setState({ badUserNameMessage: "Username Taken" });
+            return Promise.reject();
+          }
+        })
+        .then(user => {
+          this.props.handleSignUp(user.UserName);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   render() {
@@ -55,7 +60,17 @@ class SignUp extends Component {
               name="username"
               placeholder="Username"
               id="username"
+              value={this.state.username}
+              onChange={e => {
+                this.setState({
+                  username: e.target.value,
+                  badUserNameMessage: ""
+                });
+              }}
             />
+            <label className="form-text text-warning" htmlFor="username">
+              {this.state.badUserNameMessage}
+            </label>
           </div>
           <div className="form-group">
             <label className="form-text text-muted" htmlFor="password">
@@ -67,13 +82,20 @@ class SignUp extends Component {
               name="password"
               placeholder="Password"
               id="password"
+              value={this.state.password}
+              onChange={e => {
+                this.setState({
+                  password: e.target.value,
+                  badPassWordMessage: ""
+                });
+              }}
             />
-          </div>
-          {this.state.isBadSignUp && (
-            <label className="form-text text-warning" htmlFor="username">
-              {this.state.badSignUpMessage}
+
+            <label className="form-text text-warning" htmlFor="password">
+              {this.state.badPassWordMessage}
             </label>
-          )}
+          </div>
+
           <div className="postOrCancel">
             <button
               type="button"
