@@ -9,14 +9,15 @@ class Posts extends Component {
     this.state = {
       posts: [],
       numPosts: 5,
-      pageNumber: 0
+      pageNumber: 0,
+      postCount: 0
     };
   }
 
   componentDidMount() {
-    this.setState({ pageNumber: this.props.pageNumber }, () =>
-      this.refreshPosts()
-    );
+    this.setState({ pageNumber: this.props.pageNumber }, () => {
+      this.refreshPosts();
+    });
   }
 
   refreshPosts = () => {
@@ -28,6 +29,17 @@ class Posts extends Component {
             `${this.state.numPosts} posts fetched on page ${this.state.pageNumber}`,
             posts
           )
+        )
+      )
+      .then(() => this.getPostCount());
+  };
+
+  getPostCount = () => {
+    fetch("/api/posts/count")
+      .then(res => res.json())
+      .then(res =>
+        this.setState({ postCount: res.Count }, () =>
+          console.log(`${this.state.postCount} posts total`, res)
         )
       );
   };
@@ -42,10 +54,15 @@ class Posts extends Component {
   };
 
   handleNextPage = () => {
-    const nextPage = this.state.pageNumber + 1;
-    this.setState({ pageNumber: nextPage }, () => {
-      this.refreshPosts();
-    });
+    if (
+      this.state.numPosts * (this.state.pageNumber + 1) <
+      this.state.postCount
+    ) {
+      const nextPage = this.state.pageNumber + 1;
+      this.setState({ pageNumber: nextPage }, () => {
+        this.refreshPosts();
+      });
+    }
   };
 
   render() {
@@ -94,7 +111,15 @@ class Posts extends Component {
 
           <h4>page {this.state.pageNumber + 1}</h4>
 
-          <button className="btn btn-secondary" onClick={this.handleNextPage}>
+          <button
+            className={
+              this.state.numPosts * (this.state.pageNumber + 1) >=
+              this.state.postCount
+                ? "btn btn-secondary muted"
+                : "btn btn-secondary"
+            }
+            onClick={this.handleNextPage}
+          >
             Next Page
           </button>
         </div>

@@ -15,6 +15,19 @@ router.route("/").get((req, res) => {
     });
 });
 
+router.route("/count").get((req, res) => {
+  poolPromise
+    .then(pool => {
+      return pool.request().query("SELECT COUNT(*) AS Count FROM POSTS");
+    })
+    .then(result => {
+      res.json(result.recordset[0]);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
 router.route("/:id").get((req, res) => {
   poolPromise
     .then(pool => {

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./login.scss";
 
 class LogIn extends Component {
   constructor() {
@@ -43,6 +44,8 @@ class LogIn extends Component {
         console.log(err);
       });
   };
+
+  handleLogInWithSpotify = () => {};
 
   render() {
     return (
@@ -92,6 +95,20 @@ class LogIn extends Component {
             <input className="btn btn-primary" type="submit" value="Submit" />
           </div>
         </form>
+        <div className="divider">
+          <div className="line"></div>
+          <p>OR</p>
+          <div className="line"></div>
+        </div>
+        <div>
+          <button
+            type="button"
+            className="btn btn-primary btn-green"
+            onClick={this.props.handleLogInWithSpotify}
+          >
+            Log In With Spotify
+          </button>
+        </div>
       </div>
     );
   }
