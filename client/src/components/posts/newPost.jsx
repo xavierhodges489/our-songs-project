@@ -11,6 +11,7 @@ class NewPost extends Component {
       postDescription: "",
       isMakingNew: false,
       songToPost: "",
+      songToPostID: "",
       badPostSongMessage: "",
       badPostDescriptionMessage: ""
     };
@@ -34,7 +35,8 @@ class NewPost extends Component {
         },
         body: JSON.stringify({
           PostDescription: e.target[1].value,
-          PostSong: e.target[0].value,
+          //using songToPostID in case user edits id after clicking on track
+          PostSong: this.state.songToPostID,
           UserID: this.props.UserID
         })
       })
@@ -57,7 +59,7 @@ class NewPost extends Component {
   };
 
   handleOnChange = e => {
-    this.setState({ postSong: e.target.value });
+    this.setState({ postSong: e.target.value, badPostSongMessage: "" });
     fetch(
       `https://api.spotify.com/v1/search?q=${e.target.value}&type=track&market=US&limit=6`,
       {
@@ -87,6 +89,7 @@ class NewPost extends Component {
       results: [],
       postSong: id,
       songToPost: `${selectedTrack.name} by ${selectedTrack.artists[0].name}`,
+      songToPostID: id,
       badPostSongMessage: ""
     });
   };
@@ -102,6 +105,7 @@ class NewPost extends Component {
       postDescription: "",
       isMakingNew: false,
       songToPost: "",
+      songToPostID: "",
       badPostSongMessage: "",
       badPostDescriptionMessage: ""
     });
@@ -116,7 +120,7 @@ class NewPost extends Component {
               <label className="form-text text-muted" htmlFor="PostSong">
                 Enter Spotify Track ID{" "}
                 {this.state.songToPost && (
-                  <span htmlFor="PostSong"> ({this.state.songToPost})</span>
+                  <span htmlFor="PostSong">({this.state.songToPost})</span>
                 )}
               </label>
               <input
@@ -153,7 +157,10 @@ class NewPost extends Component {
               </label>
               <input
                 onChange={e =>
-                  this.setState({ postDescription: e.target.value })
+                  this.setState({
+                    postDescription: e.target.value,
+                    badPostDescriptionMessage: ""
+                  })
                 }
                 value={this.state.postDescription}
                 className="form-control"

@@ -9,41 +9,58 @@ class NewComment extends Component {
       results: [],
       commentSong: "",
       commentDescription: "",
-      isMakingNew: false
+      isMakingNew: false,
+      commentToPost: "",
+      commentToPostID: "",
+      badCommentSongMessage: "",
+      badCommentDescriptionMessage: ""
     };
   }
 
   handleSubmit = e => {
     e.preventDefault();
-    this.setState({
-      results: [],
-      commentSong: "",
-      commentDescription: "",
-      isMakingNew: false
-    });
-
-    fetch("/api/comments", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        PostID: this.props.PostID,
-        CommentDescription: e.target[1].value,
-        CommentSong: e.target[0].value,
-        UserID: this.props.UserID
-      })
-    })
-      .then(() => {
-        this.props.refresh();
-      })
-      .catch(err => {
-        console.log(err);
+    if (this.state.commentToPost === "") {
+      this.setState({
+        badCommentSongMessage: "Please select a song"
       });
+    } else if (this.state.commentDescription === "") {
+      this.setState({
+        badCommentDescriptionMessage: "Comments must have a description"
+      });
+    } else {
+      fetch("/api/comments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          PostID: this.props.PostID,
+          CommentDescription: e.target[1].value,
+          //using commentToPostID in case user edits id after clicking on track
+          CommentSong: this.state.commentToPostID,
+          UserID: this.props.UserID
+        })
+      })
+        .then(() => {
+          this.props.refresh();
+          this.setState({
+            results: [],
+            commentSong: "",
+            commentDescription: "",
+            isMakingNew: false,
+            commentToPost: "",
+            badCommentSongMessage: "",
+            badCommentDescriptionMessage: ""
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   handleOnChange = e => {
-    this.setState({ commentSong: e.target.value });
+    this.setState({ commentSong: e.target.value, badCommentSongMessage: "" });
     fetch(
       `https://api.spotify.com/v1/search?q=${e.target.value}&type=track&market=US&limit=6`,
       {
@@ -65,7 +82,17 @@ class NewComment extends Component {
   };
 
   handleTrackClick = id => {
-    this.setState({ results: [], commentSong: id });
+    const isTrack = element => element.id === id;
+    const selectedTrackIndex = this.state.results.findIndex(isTrack);
+    const selectedTrack = this.state.results[selectedTrackIndex];
+
+    this.setState({
+      results: [],
+      commentSong: id,
+      commentToPost: `${selectedTrack.name} by ${selectedTrack.artists[0].name}`,
+      commentToPostID: id,
+      badCommentSongMessage: ""
+    });
   };
 
   handleCreateNewComment = () => {
@@ -77,7 +104,11 @@ class NewComment extends Component {
       results: [],
       commentSong: "",
       commentDescription: "",
-      isMakingNew: false
+      isMakingNew: false,
+      commentToPost: "",
+      commentToPostID: "",
+      badCommentSongMessage: "",
+      badCommentDescriptionMessage: ""
     });
   };
 
@@ -88,7 +119,12 @@ class NewComment extends Component {
           <form onSubmit={this.handleSubmit}>
             <div className="form-group">
               <label className="form-text text-muted" htmlFor="CommentSong">
-                Enter Spotify Track ID
+                Enter Spotify Track ID{" "}
+                {this.state.commentToPost && (
+                  <span htmlFor="CommentSong">
+                    ({this.state.commentToPost})
+                  </span>
+                )}
               </label>
               <input
                 onChange={this.handleOnChange}
@@ -98,6 +134,11 @@ class NewComment extends Component {
                 name="CommentSong"
                 id="CommentSong"
               />
+              {this.state.badCommentSongMessage && (
+                <label className="form-text text-warning" htmlFor="CommentSong">
+                  {this.state.badCommentSongMessage}
+                </label>
+              )}
             </div>
             <div>
               {this.state.results.map(track => (
@@ -121,7 +162,10 @@ class NewComment extends Component {
               </label>
               <input
                 onChange={e =>
-                  this.setState({ commentDescription: e.target.value })
+                  this.setState({
+                    commentDescription: e.target.value,
+                    badCommentDescriptionMessage: ""
+                  })
                 }
                 value={this.state.commentDescription}
                 className="form-control"
@@ -129,6 +173,14 @@ class NewComment extends Component {
                 name="CommentDescription"
                 id="CommentDescription"
               />
+              {this.state.badCommentDescriptionMessage && (
+                <label
+                  className="form-text text-warning"
+                  htmlFor="CommentDescription"
+                >
+                  {this.state.badCommentDescriptionMessage}
+                </label>
+              )}
             </div>
             <div className="commentOrCancel">
               <button
