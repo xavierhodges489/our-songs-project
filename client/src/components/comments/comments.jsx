@@ -35,7 +35,7 @@ class Comments extends Component {
             PostID={this.props.PostID}
             refresh={this.refreshComments}
             token={this.props.token}
-            UserID={this.props.UserID}
+            currentUserName={this.props.currentUserName}
           />
         )}
 
@@ -46,9 +46,8 @@ class Comments extends Component {
               CommentID={comment.CommentID}
               description={comment.CommentDescription}
               song={comment.CommentSong}
-              UserID={comment.UserID}
               UserName={comment.UserName}
-              currentUserID={this.props.UserID}
+              currentUserName={this.props.currentUserName}
               token={this.props.token}
               refresh={this.refreshComments}
             />

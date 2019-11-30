@@ -6,9 +6,8 @@ router.route("/:postid").get((req, res) => {
   poolPromise
     .then(pool => {
       return pool.request().query(`
-        SELECT CommentID, PostID, CommentDescription, CommentSong, COMMENTS.UserID, UserName 
-        FROM COMMENTS
-          JOIN USERS ON (COMMENTS.UserID = USERS.UserID) 
+        SELECT CommentID, PostID, CommentDescription, CommentSong, CommentDate, UserName 
+        FROM COMMENTS 
         WHERE PostID=${req.params.postid}`);
     })
     .then(result => {
@@ -40,15 +39,15 @@ router.route("/").post((req, res) => {
     PostID: req.body.PostID,
     CommentDescription: req.body.CommentDescription,
     CommentSong: req.body.CommentSong,
-    UserID: req.body.UserID
+    UserName: req.body.UserName
   };
 
   poolPromise
     .then(pool => {
       return pool.request().query(
-        `INSERT INTO COMMENTS (PostID, CommentDescription, CommentSong, UserID)
+        `INSERT INTO COMMENTS (PostID, CommentDescription, CommentSong, UserName)
           VALUES
-            (${comment.PostID}, '${comment.CommentDescription}', '${comment.CommentSong}', ${comment.UserID})`
+            (${comment.PostID}, '${comment.CommentDescription}', '${comment.CommentSong}', '${comment.UserName}')`
       );
     })
     .then(result => {

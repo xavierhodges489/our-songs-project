@@ -43,7 +43,7 @@ class NewPost extends Component {
           PostDescription: this.state.postDescription,
           //using songToPostID in case user edits id after clicking on track
           PostSong: this.state.songToPostID,
-          UserID: this.props.UserID
+          UserName: this.props.currentUserName
         })
       })
         .then(() => {
@@ -76,9 +76,11 @@ class NewPost extends Component {
     )
       .then(res => res.json())
       .then(result => {
-        this.setState({
-          results: result.tracks.items
-        });
+        if (result.tracks) {
+          this.setState({
+            results: result.tracks.items
+          });
+        }
       })
       .catch(err => {
         console.log(err);

@@ -29,8 +29,7 @@ class App extends Component {
       token: "",
       isLoggedIn: false,
       isLoggedInWithSpotify: false,
-      UserID: -1,
-      Username: "",
+      UserName: "",
       isWelcoming: false,
       isSigningUp: false,
       isLoggingIn: false,
@@ -65,7 +64,7 @@ class App extends Component {
             this.setState({
               isLoggedIn: true,
               isLoggedInWithSpotify: true,
-              Username: result.display_name
+              UserName: result.display_name
             });
           });
       });
@@ -97,18 +96,17 @@ class App extends Component {
   };
 
   handleSignUp = UserName => {
-    this.setState({ Username: UserName, isWelcoming: true });
+    this.setState({ UserName: UserName, isWelcoming: true });
     this.handleSignUpClose();
   };
 
   handleWelcomeGoBack = () => {
-    this.setState({ isWelcoming: false, Username: "" }, this.handleLogInOpen());
+    this.setState({ isWelcoming: false, UserName: "" }, this.handleLogInOpen());
   };
 
-  handleLogIn = (UserID, Username) => {
+  handleLogIn = UserName => {
     this.setState({
-      UserID: UserID,
-      Username: Username,
+      UserName: UserName,
       isLoggedIn: true,
       isViewingPosts: true,
       isLoggingIn: false
@@ -122,8 +120,8 @@ class App extends Component {
       .then(
         this.setState({
           isLoggedIn: false,
-          isLoggedInWithSpotify: false,
-          UserID: -1
+          UserName: "",
+          isLoggedInWithSpotify: false
         })
       );
   };
@@ -173,12 +171,12 @@ class App extends Component {
       <div className="App">
         {this.state.isWelcoming && (
           <Welcome
-            UserName={this.state.Username}
+            UserName={this.state.UserName}
             handleWelcomeGoBack={this.handleWelcomeGoBack}
           />
         )}
         <Navbar
-          Username={this.state.Username}
+          UserName={this.state.UserName}
           isLoggedIn={this.state.isLoggedIn}
           handleSignUpOpen={this.handleSignUpOpen}
           handleLogInOpen={this.handleLogInOpen}
@@ -215,8 +213,7 @@ class App extends Component {
               />
               <Comments
                 isLoggedIn={this.state.isLoggedIn}
-                UserID={this.state.UserID}
-                UserName={this.state.commentsData.UserName}
+                currentUserName={this.state.UserName}
                 PostID={this.state.commentsData.PostID}
                 handleGoBackComments={this.handleGoBackComments}
                 token={this.state.token}
@@ -227,8 +224,7 @@ class App extends Component {
             <Posts
               isLoggedIn={this.state.isLoggedIn}
               isLoggedInWithSpotify={this.state.isLoggedInWithSpotify}
-              UserID={this.state.UserID}
-              UserName={this.state.UserName}
+              currentUserName={this.state.UserName}
               handleViewComments={this.handleViewComments}
               isViewingComments={this.state.isViewingComments}
               pageNumber={this.state.commentsData.pageNumber}

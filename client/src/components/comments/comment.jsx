@@ -66,7 +66,7 @@ class Comment extends Component {
                   {this.state.trackArtist} • {this.state.trackAlbum}
                 </h3>
               </div>
-              {this.props.UserID === this.props.currentUserID && (
+              {this.props.UserName === this.props.currentUserName && (
                 <button className="btn btn-danger" onClick={this.handleDelete}>
                   DELETE
                 </button>

@@ -44,8 +44,9 @@ class LogIn extends Component {
             return Promise.reject();
           }
         })
-        .then(user => {
-          this.props.handleLogIn(user[0].UserID, user[0].Username);
+        .then(result => {
+          console.log(result);
+          this.props.handleLogIn(result[0].UserName);
         })
         .catch(err => {
           console.log(err);

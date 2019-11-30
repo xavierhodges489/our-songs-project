@@ -79,9 +79,11 @@ class NewComment extends Component {
     )
       .then(res => res.json())
       .then(result => {
-        this.setState({
-          results: result.tracks.items
-        });
+        if (result.tracks) {
+          this.setState({
+            results: result.tracks.items
+          });
+        }
       })
       .catch(err => {
         console.log(err);

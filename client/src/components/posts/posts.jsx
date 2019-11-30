@@ -73,7 +73,7 @@ class Posts extends Component {
           <NewPost
             refresh={this.refreshPosts}
             token={this.props.token}
-            UserID={this.props.UserID}
+            currentUserName={this.props.currentUserName}
             isLoggedInWithSpotify={this.props.isLoggedInWithSpotify}
           />
         )}
@@ -86,10 +86,9 @@ class Posts extends Component {
               refresh={this.refreshPosts}
               description={post.PostDescription}
               song={post.PostSong}
-              UserID={post.UserID}
               UserName={post.UserName}
               numComments={post.numComments}
-              currentUserID={this.props.UserID}
+              currentUserName={this.props.currentUserName}
               token={this.props.token}
               handleViewComments={this.props.handleViewComments}
               isViewingComments={this.props.isViewingComments}

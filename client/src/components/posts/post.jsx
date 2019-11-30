@@ -95,7 +95,7 @@ class Post extends Component {
                 >
                   View Comments ({this.props.numComments})
                 </button>
-                {this.props.UserID === this.props.currentUserID && (
+                {this.props.UserName === this.props.currentUserName && (
                   <button
                     className="btn btn-danger"
                     onClick={this.handleDelete}
