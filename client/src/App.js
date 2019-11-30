@@ -9,12 +9,26 @@ import LogIn from "./components/users/login";
 import SignUp from "./components/users/signUp";
 import Welcome from "./components/users/welcome";
 
+const hash = window.location.hash
+  .substring(1)
+  .split("&")
+  .reduce(function(initial, item) {
+    if (item) {
+      var parts = item.split("=");
+      initial[parts[0]] = decodeURIComponent(parts[1]);
+    }
+    return initial;
+  }, {});
+
+window.location.hash = "";
+
 class App extends Component {
   constructor() {
     super();
     this.state = {
       token: "",
       isLoggedIn: false,
+      isLoggedInWithSpotify: false,
       UserID: -1,
       Username: "",
       isWelcoming: false,
@@ -34,10 +48,34 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch("/api/token")
-      .then(res => res.json())
-      .then(tokenRes => this.setState({ token: tokenRes.access_token }))
-      .then(this.setState({ isViewingPosts: true }));
+    let _token = hash.access_token;
+    if (_token) {
+      //use spotify implicit grant token
+      this.setState({ token: _token }, () => {
+        fetch("https://api.spotify.com/v1/me", {
+          headers: {
+            Authorization: `Bearer ${this.state.token}`
+          }
+        })
+          .then(res => {
+            return res.json();
+          })
+          .then(result => {
+            console.log(result);
+            this.setState({
+              isLoggedIn: true,
+              isLoggedInWithSpotify: true,
+              Username: result.display_name
+            });
+          });
+      });
+    } else {
+      //use spotify client creditials flow token
+      fetch("/api/token")
+        .then(res => res.json())
+        .then(result => this.setState({ token: result.access_token }))
+        .then(this.setState({ isViewingPosts: true }));
+    }
   }
 
   handleSignUpOpen = () => {
@@ -78,10 +116,16 @@ class App extends Component {
   };
 
   handleLogOut = () => {
-    this.setState({
-      isLoggedIn: false,
-      UserID: -1
-    });
+    fetch("/api/token")
+      .then(res => res.json())
+      .then(result => this.setState({ token: result.access_token }))
+      .then(
+        this.setState({
+          isLoggedIn: false,
+          isLoggedInWithSpotify: false,
+          UserID: -1
+        })
+      );
   };
 
   handleLogInOpen = () => {
@@ -182,6 +226,7 @@ class App extends Component {
           {this.state.isViewingPosts && (
             <Posts
               isLoggedIn={this.state.isLoggedIn}
+              isLoggedInWithSpotify={this.state.isLoggedInWithSpotify}
               UserID={this.state.UserID}
               UserName={this.state.UserName}
               handleViewComments={this.handleViewComments}

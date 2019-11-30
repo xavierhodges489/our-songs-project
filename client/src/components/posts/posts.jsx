@@ -74,6 +74,7 @@ class Posts extends Component {
             refresh={this.refreshPosts}
             token={this.props.token}
             UserID={this.props.UserID}
+            isLoggedInWithSpotify={this.props.isLoggedInWithSpotify}
           />
         )}
 

@@ -14,7 +14,12 @@ class SignUp extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    if (this.state.username === "") {
+    if (this.state.username === "" && this.state.password === "") {
+      this.setState({
+        badUserNameMessage: "Must have a username",
+        badPassWordMessage: "Must have a password"
+      });
+    } else if (this.state.username === "") {
       this.setState({ badUserNameMessage: "Must have a username" });
     } else if (this.state.password === "") {
       this.setState({ badPassWordMessage: "Must have a password" });
@@ -55,7 +60,11 @@ class SignUp extends Component {
               Enter Username
             </label>
             <input
-              className="form-control"
+              className={
+                this.state.badUserNameMessage
+                  ? "form-control is-invalid"
+                  : "form-control"
+              }
               type="text"
               name="username"
               placeholder="Username"
@@ -68,16 +77,20 @@ class SignUp extends Component {
                 });
               }}
             />
-            <label className="form-text text-warning" htmlFor="username">
+            <div className="invalid-feedback">
               {this.state.badUserNameMessage}
-            </label>
+            </div>
           </div>
           <div className="form-group">
             <label className="form-text text-muted" htmlFor="password">
               Enter Password
             </label>
             <input
-              className="form-control"
+              className={
+                this.state.badPassWordMessage
+                  ? "form-control is-invalid"
+                  : "form-control"
+              }
               type="password"
               name="password"
               placeholder="Password"
@@ -90,10 +103,9 @@ class SignUp extends Component {
                 });
               }}
             />
-
-            <label className="form-text text-warning" htmlFor="password">
+            <div className="invalid-feedback">
               {this.state.badPassWordMessage}
-            </label>
+            </div>
           </div>
 
           <div className="postOrCancel">

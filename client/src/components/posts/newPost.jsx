@@ -9,6 +9,7 @@ class NewPost extends Component {
       results: [],
       postSong: "",
       postDescription: "",
+      makeSpotifyPlaylist: false,
       isMakingNew: false,
       songToPost: "",
       songToPostID: "",
@@ -19,7 +20,12 @@ class NewPost extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    if (this.state.songToPost === "") {
+    if (this.state.songToPost === "" && this.state.postDescription === "") {
+      this.setState({
+        badPostSongMessage: "Please select a song",
+        badPostDescriptionMessage: "Posts must have a description"
+      });
+    } else if (this.state.songToPost === "") {
       this.setState({
         badPostSongMessage: "Please select a song"
       });
@@ -34,7 +40,7 @@ class NewPost extends Component {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          PostDescription: e.target[1].value,
+          PostDescription: this.state.postDescription,
           //using songToPostID in case user edits id after clicking on track
           PostSong: this.state.songToPostID,
           UserID: this.props.UserID
@@ -126,17 +132,18 @@ class NewPost extends Component {
               <input
                 onChange={this.handleOnChange}
                 value={this.state.postSong}
-                className="form-control"
+                className={
+                  this.state.badPostSongMessage
+                    ? "form-control is-invalid"
+                    : "form-control"
+                }
                 type="text"
                 name="PostSong"
                 id="PostSong"
               />
-
-              {this.state.badPostSongMessage && (
-                <label className="form-text text-warning" htmlFor="PostSong">
-                  {this.state.badPostSongMessage}
-                </label>
-              )}
+              <div className="invalid-feedback">
+                {this.state.badPostSongMessage}
+              </div>
             </div>
             <div>
               {this.state.results.map(track => (
@@ -163,20 +170,42 @@ class NewPost extends Component {
                   })
                 }
                 value={this.state.postDescription}
-                className="form-control"
+                className={
+                  this.state.badPostDescriptionMessage
+                    ? "form-control is-invalid"
+                    : "form-control"
+                }
                 type="text"
                 name="PostDescription"
                 id="PostDescription"
               />
-              {this.state.badPostDescriptionMessage && (
-                <label
-                  className="form-text text-warning"
-                  htmlFor="PostDescription"
-                >
-                  {this.state.badPostDescriptionMessage}
-                </label>
-              )}
+              <div className="invalid-feedback">
+                {this.state.badPostDescriptionMessage}
+              </div>
             </div>
+            <div className="form-group">
+              <div className="custom-control custom-checkbox">
+                <input
+                  type="checkbox"
+                  className="custom-control-input"
+                  id="makeSpotifyPlaylist"
+                  defaultChecked={this.state.makeSpotifyPlaylist}
+                  onChange={e => {
+                    this.setState({
+                      makeSpotifyPlaylist: !this.state.makeSpotifyPlaylist
+                    });
+                  }}
+                  disabled={this.props.isLoggedInWithSpotify ? "" : "disabled"}
+                />
+                <label
+                  className="custom-control-label"
+                  htmlFor="makeSpotifyPlaylist"
+                >
+                  Make this post a Spotify playlist
+                </label>
+              </div>
+            </div>
+
             <div className="postOrCancel">
               <button
                 type="button"

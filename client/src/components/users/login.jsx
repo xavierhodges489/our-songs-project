@@ -15,8 +15,12 @@ class LogIn extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-
-    if (this.state.username === "") {
+    if (this.state.username === "" && this.state.password === "") {
+      this.setState({
+        badUserNameMessage: "Must have a username",
+        badPassWordMessage: "Must have a password"
+      });
+    } else if (this.state.username === "") {
       this.setState({ badUserNameMessage: "Must have a username" });
     } else if (this.state.password === "") {
       this.setState({ badPassWordMessage: "Must have a password" });
@@ -49,7 +53,30 @@ class LogIn extends Component {
     }
   };
 
-  handleLogInWithSpotify = () => {};
+  generateRandomString(length) {
+    var text = "";
+    var possible =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (var i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  }
+
+  handleLogInWithSpotify = () => {
+    const client_id = "018eb308e675406b98d2e64a6bc3072c";
+    const scope = "playlist-modify-public";
+    const redirect_uri = "http://localhost:3000/";
+    const state = this.generateRandomString(16);
+
+    let url = "https://accounts.spotify.com/authorize";
+    url += "?response_type=token";
+    url += "&client_id=" + encodeURIComponent(client_id);
+    url += "&scope=" + encodeURIComponent(scope);
+    url += "&redirect_uri=" + encodeURIComponent(redirect_uri);
+    url += "&state=" + encodeURIComponent(state);
+    window.location = url;
+  };
 
   render() {
     return (
@@ -69,15 +96,19 @@ class LogIn extends Component {
                   badLogInMessage: ""
                 });
               }}
-              className="form-control"
+              className={
+                this.state.badUserNameMessage || this.state.badLogInMessage
+                  ? "form-control is-invalid"
+                  : "form-control"
+              }
               type="text"
               name="username"
               placeholder="Username"
               id="username"
             />
-            <label className="form-text text-warning" htmlFor="username">
+            <div className="invalid-feedback">
               {this.state.badUserNameMessage}
-            </label>
+            </div>
           </div>
           <div className="form-group">
             <label className="form-text text-muted" htmlFor="password">
@@ -92,19 +123,25 @@ class LogIn extends Component {
                   badLogInMessage: ""
                 });
               }}
-              className="form-control"
+              className={
+                this.state.badPassWordMessage || this.state.badLogInMessage
+                  ? "form-control is-invalid"
+                  : "form-control"
+              }
               type="password"
               name="password"
               placeholder="Password"
               id="password"
             />
-            <label className="form-text text-warning" htmlFor="password">
+            <div className="invalid-feedback">
               {this.state.badPassWordMessage}
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="form-text text-danger" htmlFor="username">
+              {this.state.badLogInMessage}
             </label>
           </div>
-          <label className="form-text text-warning" htmlFor="username">
-            {this.state.badLogInMessage}
-          </label>
 
           <div className="postOrCancel">
             <button
@@ -124,9 +161,8 @@ class LogIn extends Component {
         </div>
         <div>
           <button
-            type="button"
             className="btn btn-primary btn-green"
-            onClick={this.props.handleLogInWithSpotify}
+            onClick={this.handleLogInWithSpotify}
           >
             Log In With Spotify
           </button>

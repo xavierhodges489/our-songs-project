@@ -19,7 +19,15 @@ class NewComment extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    if (this.state.commentToPost === "") {
+    if (
+      this.state.commentToPost === "" &&
+      this.state.commentDescription === ""
+    ) {
+      this.setState({
+        badCommentSongMessage: "Please select a song",
+        badCommentDescriptionMessage: "Comments must have a description"
+      });
+    } else if (this.state.commentToPost === "") {
       this.setState({
         badCommentSongMessage: "Please select a song"
       });
@@ -129,16 +137,18 @@ class NewComment extends Component {
               <input
                 onChange={this.handleOnChange}
                 value={this.state.commentSong}
-                className="form-control"
+                className={
+                  this.state.badCommentSongMessage
+                    ? "form-control is-invalid"
+                    : "form-control"
+                }
                 type="text"
                 name="CommentSong"
                 id="CommentSong"
               />
-              {this.state.badCommentSongMessage && (
-                <label className="form-text text-warning" htmlFor="CommentSong">
-                  {this.state.badCommentSongMessage}
-                </label>
-              )}
+              <div className="invalid-feedback">
+                {this.state.badCommentSongMessage}
+              </div>
             </div>
             <div>
               {this.state.results.map(track => (
@@ -168,19 +178,18 @@ class NewComment extends Component {
                   })
                 }
                 value={this.state.commentDescription}
-                className="form-control"
+                className={
+                  this.state.badCommentDescriptionMessage
+                    ? "form-control is-invalid"
+                    : "form-control"
+                }
                 type="text"
                 name="CommentDescription"
                 id="CommentDescription"
               />
-              {this.state.badCommentDescriptionMessage && (
-                <label
-                  className="form-text text-warning"
-                  htmlFor="CommentDescription"
-                >
-                  {this.state.badCommentDescriptionMessage}
-                </label>
-              )}
+              <div className="invalid-feedback">
+                {this.state.badCommentDescriptionMessage}
+              </div>
             </div>
             <div className="commentOrCancel">
               <button
