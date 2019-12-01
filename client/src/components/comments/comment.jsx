@@ -96,25 +96,30 @@ class Comment extends Component {
                   {this.state.trackArtist} • {this.state.trackAlbum}
                 </h3>
               </div>
-              {this.props.UserName === this.props.currentUserName && (
-                <button className="btn btn-danger" onClick={this.handleDelete}>
-                  DELETE
-                </button>
-              )}
+              <div className="buttons">
+                {this.props.currentUserName === this.props.postUserName &&
+                  this.props.isLoggedInWithSpotify &&
+                  this.props.Playlist && (
+                    <button
+                      className="btn btn-secondary btn-spotify"
+                      onClick={() => {
+                        this.handleAddOrRemove();
+                      }}
+                    >
+                      Add or Remove From Playlist
+                    </button>
+                  )}
+                {this.props.UserName === this.props.currentUserName && (
+                  <button
+                    className="btn btn-danger"
+                    onClick={this.handleDelete}
+                  >
+                    DELETE
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-          {this.props.currentUserName === this.props.postUserName &&
-            this.props.isLoggedInWithSpotify &&
-            this.props.Playlist && (
-              <div
-                className="add-or-remove"
-                onClick={() => {
-                  this.handleAddOrRemove();
-                }}
-              >
-                <p>Add or Remove From Playlist</p>
-              </div>
-            )}
         </div>
         {this.state.displayWidget && (
           <iframe
