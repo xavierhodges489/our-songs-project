@@ -6,11 +6,12 @@ router.route("/:postid").get((req, res) => {
   poolPromise
     .then(pool => {
       return pool.request().query(`
-        SELECT CommentID, PostID, CommentDescription, CommentSong, CommentDate, UserName 
+        SELECT CommentID, PostID, CommentDescription, CommentSong, CommentDate, UserName, IsInPlaylist
         FROM COMMENTS 
         WHERE PostID=${req.params.postid}`);
     })
     .then(result => {
+      console.log("comments fetched!");
       res.json(result.recordset);
     })
     .catch(err => {
@@ -45,6 +46,24 @@ router.route("/").post((req, res) => {
     })
     .then(result => {
       console.log("comment posted!");
+      res.send(result);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+router.route("/").put((req, res) => {
+  poolPromise
+    .then(pool => {
+      return pool.request().query(
+        `UPDATE COMMENTS
+        SET IsInPlaylist = '${req.body.value}'
+        WHERE CommentID = ${req.body.CommentID}`
+      );
+    })
+    .then(result => {
+      console.log("comment updated!");
       res.send(result);
     })
     .catch(err => {

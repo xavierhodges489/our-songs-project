@@ -1,12 +1,37 @@
 .comment {
   width: 100%;
   min-height: 180px;
-
   border-bottom: solid 1px rgb(211, 211, 211);
   display: flex;
+  margin: -1.2px 0;
 
-  @media screen and (max-width: 480px) {
-    flex-direction: column;
+  .add-or-remove {
+    width: 20px;
+    height: 180px;
+    background-color: #1db954;
+    transition-duration: 0.25s;
+    display: flex;
+    justify-content: center;
+
+    p {
+      height: 80%;
+      text-align: center;
+      color: white;
+      font-weight: 500;
+      writing-mode: vertical-rl;
+      text-orientation: sideways-right;
+      margin: auto;
+      opacity: 0;
+      transition-duration: 0.25s;
+    }
+  }
+
+  .add-or-remove:hover {
+    width: 100px;
+
+    p {
+      opacity: 100;
+    }
   }
 
   .frame {
@@ -17,21 +42,15 @@
       height: 100%;
       box-shadow: 0 0px 8px rgba(0, 0, 0, 0.5);
     }
+  }
 
-    iframe {
-      min-width: 100%;
-      height: 100%;
-      box-shadow: 0 0px 8px rgba(0, 0, 0, 0.5);
-    }
+  @media screen and (max-width: 480px) {
+    // flex-direction: column;
   }
 
   @media screen and (max-width: 480px) {
     .frame {
-      height: 100%;
-
-      img {
-        width: 100%;
-      }
+      height: 100px;
     }
   }
 
@@ -44,22 +63,35 @@
     flex-direction: column;
     justify-content: space-between;
 
-    .username {
-      float: right;
-      width: 130px;
-      text-align: right;
-    }
+    .user-info {
+      .username {
+        float: right;
+        width: 130px;
+        text-align: right;
+      }
 
-    .description {
-      width: 100%;
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin: 0 0 10px 0;
+      .description {
+        width: 100%;
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin: 0 0 10px 0;
+      }
     }
 
     @media screen and (max-width: 480px) {
       .user-info {
-        flex-direction: column;
+        display: flex;
+        flex-direction: column-reverse;
+
+        .description {
+          margin-bottom: 3px;
+        }
+
+        .username {
+          text-align: left;
+          font-size: 0.8rem;
+          margin: 0;
+        }
       }
     }
 
@@ -79,6 +111,7 @@
   .meta {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
 
     h2 {
       font-size: 1rem;
@@ -112,4 +145,8 @@
       width: 100%;
     }
   }
+}
+
+.is-in-playlist {
+  border: solid 1.2px #1db954;
 }

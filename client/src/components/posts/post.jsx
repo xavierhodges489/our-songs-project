@@ -92,8 +92,8 @@ class Post extends Component {
                 </h3>
               </div>
             </div>
-            {!this.props.isViewingComments && (
-              <div className="buttons">
+            <div className="buttons">
+              {!this.props.isViewingComments && (
                 <button
                   className="btn btn-secondary"
                   onClick={() =>
@@ -103,22 +103,33 @@ class Post extends Component {
                       PostSong: this.props.song,
                       PostDescription: this.props.description,
                       pageNumber: this.props.pageNumber,
-                      PostDate: this.convertDate(this.props.PostDate)
+                      PostDate: this.convertDate(this.props.PostDate),
+                      Playlist: this.props.Playlist
                     })
                   }
                 >
                   View Comments ({this.props.numComments})
                 </button>
-                {this.props.UserName === this.props.currentUserName && (
-                  <button
-                    className="btn btn-danger"
-                    onClick={this.handleDelete}
-                  >
-                    DELETE
-                  </button>
-                )}
-              </div>
-            )}
+              )}
+              {this.props.Playlist && (
+                <button
+                  className="btn btn-secondary btn-spotify"
+                  onClick={e => {
+                    window.open(
+                      `http://open.spotify.com/user/thelinmichael/playlist/${this.props.Playlist}`,
+                      "_blank"
+                    );
+                  }}
+                >
+                  Open Spotify Playlist
+                </button>
+              )}
+              {this.props.UserName === this.props.currentUserName && (
+                <button className="btn btn-danger" onClick={this.handleDelete}>
+                  DELETE
+                </button>
+              )}
+            </div>
           </div>
         </div>
         {this.state.displayWidget && (

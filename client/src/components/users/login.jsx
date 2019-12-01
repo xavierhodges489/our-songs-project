@@ -67,7 +67,7 @@ class LogIn extends Component {
   handleLogInWithSpotify = () => {
     const client_id = "018eb308e675406b98d2e64a6bc3072c";
     const scope = "playlist-modify-public";
-    const redirect_uri = "http://localhost:3000/";
+    const redirect_uri = "https://oursongs.herokuapp.com/";
     const state = this.generateRandomString(16);
 
     let url = "https://accounts.spotify.com/authorize";
@@ -83,6 +83,19 @@ class LogIn extends Component {
     return (
       <div className="log-in">
         <h2>Log In</h2>
+        <div>
+          <button
+            className="btn btn-primary btn-green"
+            onClick={this.handleLogInWithSpotify}
+          >
+            Log In With Spotify
+          </button>
+        </div>
+        <div className="divider">
+          <div className="line"></div>
+          <p>OR</p>
+          <div className="line"></div>
+        </div>
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label className="form-text text-muted" htmlFor="username">
@@ -139,6 +152,10 @@ class LogIn extends Component {
             </div>
           </div>
           <div className="form-group">
+            <label className="form-text" htmlFor="username">
+              (Users not logged in with spotify will not be able to create
+              spotify playlists)
+            </label>
             <label className="form-text text-danger" htmlFor="username">
               {this.state.badLogInMessage}
             </label>
@@ -155,19 +172,6 @@ class LogIn extends Component {
             <input className="btn btn-primary" type="submit" value="Submit" />
           </div>
         </form>
-        <div className="divider">
-          <div className="line"></div>
-          <p>OR</p>
-          <div className="line"></div>
-        </div>
-        <div>
-          <button
-            className="btn btn-primary btn-green"
-            onClick={this.handleLogInWithSpotify}
-          >
-            Log In With Spotify
-          </button>
-        </div>
       </div>
     );
   }

@@ -75,6 +75,7 @@ class Posts extends Component {
             token={this.props.token}
             currentUserName={this.props.currentUserName}
             isLoggedInWithSpotify={this.props.isLoggedInWithSpotify}
+            spotifyUserID={this.props.spotifyUserID}
           />
         )}
 
@@ -89,6 +90,7 @@ class Posts extends Component {
               UserName={post.UserName}
               numComments={post.numComments}
               PostDate={post.PostDate}
+              Playlist={post.Playlist}
               currentUserName={this.props.currentUserName}
               token={this.props.token}
               handleViewComments={this.props.handleViewComments}

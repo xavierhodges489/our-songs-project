@@ -10,6 +10,7 @@ class NewPost extends Component {
       postSong: "",
       postDescription: "",
       makeSpotifyPlaylist: false,
+      playlistID: "",
       isMakingNew: false,
       songToPost: "",
       songToPostID: "",
@@ -34,38 +35,81 @@ class NewPost extends Component {
         badPostDescriptionMessage: "Posts must have a description"
       });
     } else {
-      fetch("/api/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          PostDescription: this.state.postDescription,
-          //using songToPostID in case user edits id after clicking on track
-          PostSong: this.state.songToPostID,
-          PostDate: new Date()
-            .toISOString()
-            .slice(0, 19)
-            .replace("T", " "),
-          UserName: this.props.currentUserName
-        })
-      })
-        .then(() => {
-          this.props.refresh();
-          this.setState({
-            results: [],
-            postSong: "",
-            postDescription: "",
-            isMakingNew: false,
-            songToPost: "",
-            badPostSongMessage: "",
-            badPostDescriptionMessage: ""
+      if (this.state.makeSpotifyPlaylist && this.props.isLoggedInWithSpotify) {
+        fetch(
+          `https://api.spotify.com/v1/users/${this.props.spotifyUserID}/playlists`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${this.props.token}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              name: this.state.postDescription,
+              public: true
+            })
+          }
+        )
+          .then(res => res.json())
+          .then(response => {
+            this.setState({ playlistID: response.id });
+            return response.id;
+          })
+          .then(id => {
+            fetch(`https://api.spotify.com/v1/playlists/${id}/tracks`, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${this.props.token}`,
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                uris: [`spotify:track:${this.state.songToPostID}`]
+              })
+            });
+          })
+          .then(() => {
+            this.makePost();
           });
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      } else this.makePost();
     }
+  };
+
+  makePost = callback => {
+    fetch("/api/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        PostDescription: this.state.postDescription,
+        //using songToPostID in case user edits id after clicking on track
+        PostSong: this.state.songToPostID,
+        PostDate: new Date()
+          .toISOString()
+          .slice(0, 19)
+          .replace("T", " "),
+        UserName: this.props.currentUserName,
+        Playlist: this.state.playlistID
+      })
+    })
+      .then(() => {
+        this.props.refresh();
+        this.setState({
+          results: [],
+          postSong: "",
+          postDescription: "",
+          makeSpotifyPlaylist: false,
+          playlistID: "",
+          isMakingNew: false,
+          songToPost: "",
+          songToPostID: "",
+          badPostSongMessage: "",
+          badPostDescriptionMessage: ""
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   handleOnChange = e => {
@@ -115,6 +159,8 @@ class NewPost extends Component {
       results: [],
       postSong: "",
       postDescription: "",
+      makeSpotifyPlaylist: false,
+      playlistID: "",
       isMakingNew: false,
       songToPost: "",
       songToPostID: "",

@@ -49,7 +49,7 @@ router.route("/page/:numPosts/:pageNumber").get((req, res) => {
   poolPromise
     .then(pool => {
       return pool.request().query(`
-        SELECT PostID, PostDescription, PostSong, PostDate, UserName, (SELECT COUNT(*) FROM COMMENTS WHERE COMMENTS.PostID = POSTS.PostID) as numComments
+        SELECT PostID, PostDescription, PostSong, PostDate, UserName, Playlist, (SELECT COUNT(*) FROM COMMENTS WHERE COMMENTS.PostID = POSTS.PostID) as numComments
         FROM POSTS 
         ORDER BY PostID DESC
         OFFSET ${req.params.pageNumber * req.params.numPosts} ROWS
@@ -84,9 +84,9 @@ router.route("/").post((req, res) => {
   poolPromise
     .then(pool => {
       return pool.request().query(
-        `INSERT INTO POSTS (PostDescription, PostSong, PostDate, UserName)
+        `INSERT INTO POSTS (PostDescription, PostSong, PostDate, UserName, Playlist)
           VALUES
-            ('${req.body.PostDescription}', '${req.body.PostSong}', '${req.body.PostDate}', '${req.body.UserName}')`
+            ('${req.body.PostDescription}', '${req.body.PostSong}', '${req.body.PostDate}', '${req.body.UserName}', '${req.body.Playlist}')`
       );
     })
     .then(result => {

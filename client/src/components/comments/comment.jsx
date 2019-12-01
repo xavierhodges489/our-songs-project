@@ -61,10 +61,23 @@ class Comment extends Component {
     }
   };
 
+  handleAddOrRemove = () => {
+    this.props.IsInPlaylist
+      ? this.props.removeTrackFromPlaylist(
+          this.props.CommentID,
+          this.props.song
+        )
+      : this.props.addTrackToPlaylist(this.props.CommentID, this.props.song);
+  };
+
   render() {
     return (
       <div>
-        <div className="comment">
+        <div
+          className={
+            this.props.IsInPlaylist ? "comment is-in-playlist" : "comment"
+          }
+        >
           <div className="frame" onClick={this.handleFameClick}>
             <img src={this.state.trackAlbumArtUrl} alt="" />
           </div>
@@ -90,6 +103,18 @@ class Comment extends Component {
               )}
             </div>
           </div>
+          {this.props.currentUserName === this.props.postUserName &&
+            this.props.isLoggedInWithSpotify &&
+            this.props.Playlist && (
+              <div
+                className="add-or-remove"
+                onClick={() => {
+                  this.handleAddOrRemove();
+                }}
+              >
+                <p>Add or Remove From Playlist</p>
+              </div>
+            )}
         </div>
         {this.state.displayWidget && (
           <iframe

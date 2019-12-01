@@ -54,6 +54,23 @@ class NewComment extends Component {
         })
       })
         .then(() => {
+          // if (this.props.Playlist) {
+          //   fetch(
+          //     `https://api.spotify.com/v1/playlists/${this.props.Playlist}/tracks`,
+          //     {
+          //       method: "POST",
+          //       headers: {
+          //         Authorization: `Bearer ${this.props.token}`,
+          //         "Content-Type": "application/json"
+          //       },
+          //       body: JSON.stringify({
+          //         uris: [`spotify:track:${this.state.commentToPostID}`]
+          //       })
+          //     }
+          //   );
+          // }
+        })
+        .then(() => {
           this.props.refresh();
           this.setState({
             results: [],

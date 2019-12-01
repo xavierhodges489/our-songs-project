@@ -30,6 +30,7 @@ class App extends Component {
       isLoggedIn: false,
       isLoggedInWithSpotify: false,
       UserName: "",
+      spotifyUserID: "",
       isWelcoming: false,
       isSigningUp: false,
       isLoggingIn: false,
@@ -41,7 +42,9 @@ class App extends Component {
         PostID: -1,
         PostSong: "",
         PostDescription: "",
-        pageNumber: 0
+        pageNumber: 0,
+        PostDate: "",
+        Playlist: ""
       }
     };
   }
@@ -64,7 +67,8 @@ class App extends Component {
             this.setState({
               isLoggedIn: true,
               isLoggedInWithSpotify: true,
-              UserName: result.display_name
+              UserName: result.display_name,
+              spotifyUserID: result.id
             });
           });
       });
@@ -154,7 +158,8 @@ class App extends Component {
         PostSong: e.PostSong,
         PostDescription: e.PostDescription,
         pageNumber: e.pageNumber,
-        PostDate: e.PostDate
+        PostDate: e.PostDate,
+        Playlist: e.Playlist
       }
     });
   };
@@ -206,17 +211,22 @@ class App extends Component {
               </button>
               <Post
                 UserName={this.state.commentsData.UserName}
+                currentUserName={this.state.UserName}
                 PostID={this.state.commentsData.PostID}
                 song={this.state.commentsData.PostSong}
                 description={this.state.commentsData.PostDescription}
                 PostDate={this.state.commentsData.PostDate}
+                Playlist={this.state.commentsData.Playlist}
                 token={this.state.token}
                 isViewingComments={this.state.isViewingComments}
               />
               <Comments
                 isLoggedIn={this.state.isLoggedIn}
+                isLoggedInWithSpotify={this.state.isLoggedInWithSpotify}
+                UserName={this.state.commentsData.UserName}
                 currentUserName={this.state.UserName}
                 PostID={this.state.commentsData.PostID}
+                Playlist={this.state.commentsData.Playlist}
                 handleGoBackComments={this.handleGoBackComments}
                 token={this.state.token}
               />
@@ -227,6 +237,7 @@ class App extends Component {
               isLoggedIn={this.state.isLoggedIn}
               isLoggedInWithSpotify={this.state.isLoggedInWithSpotify}
               currentUserName={this.state.UserName}
+              spotifyUserID={this.state.spotifyUserID}
               handleViewComments={this.handleViewComments}
               isViewingComments={this.state.isViewingComments}
               pageNumber={this.state.commentsData.pageNumber}
