@@ -43,6 +43,10 @@ class NewPost extends Component {
           PostDescription: this.state.postDescription,
           //using songToPostID in case user edits id after clicking on track
           PostSong: this.state.songToPostID,
+          PostDate: new Date()
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
           UserName: this.props.currentUserName
         })
       })

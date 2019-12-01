@@ -88,6 +88,7 @@ class Posts extends Component {
               song={post.PostSong}
               UserName={post.UserName}
               numComments={post.numComments}
+              PostDate={post.PostDate}
               currentUserName={this.props.currentUserName}
               token={this.props.token}
               handleViewComments={this.props.handleViewComments}

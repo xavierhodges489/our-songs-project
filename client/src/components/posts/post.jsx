@@ -51,6 +51,16 @@ class Post extends Component {
     this.setState({ displayWidget: !this.state.displayWidget });
   };
 
+  convertDate = date => {
+    if (date) {
+      const dateObject = new Date(date);
+      const dateParts = dateObject.toDateString().split(" ");
+      dateParts[0] += ",";
+      dateParts[2] += ",";
+      return dateParts.join(" ");
+    }
+  };
+
   render() {
     return (
       <div>
@@ -60,6 +70,10 @@ class Post extends Component {
           </div>
           <div className="info">
             <div className="user-info">
+              <p className="username">
+                Posted by {this.props.UserName} <br></br>
+                {this.convertDate(this.props.PostDate)}
+              </p>
               <h2
                 className={
                   this.props.isViewingComments
@@ -69,7 +83,6 @@ class Post extends Component {
               >
                 {this.props.description}
               </h2>
-              <p className="username">Posted by {this.props.UserName}</p>
             </div>
             <div className="meta">
               <div>
@@ -89,7 +102,8 @@ class Post extends Component {
                       PostID: this.props.postID,
                       PostSong: this.props.song,
                       PostDescription: this.props.description,
-                      pageNumber: this.props.pageNumber
+                      pageNumber: this.props.pageNumber,
+                      PostDate: this.convertDate(this.props.PostDate)
                     })
                   }
                 >

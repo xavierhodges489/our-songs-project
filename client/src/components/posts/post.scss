@@ -44,20 +44,22 @@
     flex-direction: column;
     justify-content: space-between;
 
-    .user-info {
-      display: flex;
-      justify-content: space-between;
+    .username {
+      float: right;
+      width: 130px;
+      text-align: right;
     }
 
     .description {
+      width: 100%;
       font-size: 1.2rem;
       font-weight: 700;
-      margin: 0;
+      margin: 0 0 10px 0;
     }
 
     .bigger {
       font-size: 1.8rem;
-      width: 70%;
+      width: 100%;
     }
 
     .viewComments {

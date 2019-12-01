@@ -153,7 +153,8 @@ class App extends Component {
         PostID: e.PostID,
         PostSong: e.PostSong,
         PostDescription: e.PostDescription,
-        pageNumber: e.pageNumber
+        pageNumber: e.pageNumber,
+        PostDate: e.PostDate
       }
     });
   };
@@ -208,6 +209,7 @@ class App extends Component {
                 PostID={this.state.commentsData.PostID}
                 song={this.state.commentsData.PostSong}
                 description={this.state.commentsData.PostDescription}
+                PostDate={this.state.commentsData.PostDate}
                 token={this.state.token}
                 isViewingComments={this.state.isViewingComments}
               />

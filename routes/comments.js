@@ -35,24 +35,17 @@ router.route("/:id").delete((req, res) => {
 });
 
 router.route("/").post((req, res) => {
-  const comment = {
-    PostID: req.body.PostID,
-    CommentDescription: req.body.CommentDescription,
-    CommentSong: req.body.CommentSong,
-    UserName: req.body.UserName
-  };
-
   poolPromise
     .then(pool => {
       return pool.request().query(
-        `INSERT INTO COMMENTS (PostID, CommentDescription, CommentSong, UserName)
+        `INSERT INTO COMMENTS (PostID, CommentDescription, CommentSong, CommentDate, UserName)
           VALUES
-            (${comment.PostID}, '${comment.CommentDescription}', '${comment.CommentSong}', '${comment.UserName}')`
+            (${req.body.PostID}, '${req.body.CommentDescription}', '${req.body.CommentSong}', '${req.body.CommentDate}', '${req.body.UserName}')`
       );
     })
     .then(result => {
       console.log("comment posted!");
-      res.send(comment);
+      res.send(result);
     })
     .catch(err => {
       console.log(err);

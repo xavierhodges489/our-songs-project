@@ -51,6 +51,16 @@ class Comment extends Component {
     this.setState({ displayWidget: !this.state.displayWidget });
   };
 
+  convertDate = date => {
+    if (date) {
+      const dateObject = new Date(date);
+      const dateParts = dateObject.toDateString().split(" ");
+      dateParts[0] += ",";
+      dateParts[2] += ",";
+      return dateParts.join(" ");
+    }
+  };
+
   render() {
     return (
       <div>
@@ -59,6 +69,13 @@ class Comment extends Component {
             <img src={this.state.trackAlbumArtUrl} alt="" />
           </div>
           <div className="info">
+            <div className="user-info">
+              <p className="username">
+                Posted by {this.props.UserName} <br></br>
+                {this.convertDate(this.props.CommentDate)}
+              </p>
+              <h2 className="description">{this.props.description}</h2>
+            </div>
             <div className="meta">
               <div>
                 <h2>{this.state.trackTitle}</h2>
@@ -71,10 +88,6 @@ class Comment extends Component {
                   DELETE
                 </button>
               )}
-            </div>
-            <div className="user-info">
-              <h2 className="description">{this.props.description}</h2>
-              <p className="username">Commented by {this.props.UserName}</p>
             </div>
           </div>
         </div>

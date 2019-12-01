@@ -43,10 +43,14 @@ class NewComment extends Component {
         },
         body: JSON.stringify({
           PostID: this.props.PostID,
-          CommentDescription: e.target[1].value,
+          CommentDescription: this.state.commentDescription,
           //using commentToPostID in case user edits id after clicking on track
           CommentSong: this.state.commentToPostID,
-          UserID: this.props.UserID
+          CommentDate: new Date()
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " "),
+          UserName: this.props.currentUserName
         })
       })
         .then(() => {
@@ -213,7 +217,7 @@ class NewComment extends Component {
             onClick={this.handleCreateNewComment}
             className="btn btn-primary"
           >
-            Make Comment
+            Make A Comment
           </button>
         )}
       </div>

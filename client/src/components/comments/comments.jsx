@@ -46,6 +46,7 @@ class Comments extends Component {
               CommentID={comment.CommentID}
               description={comment.CommentDescription}
               song={comment.CommentSong}
+              CommentDate={comment.CommentDate}
               UserName={comment.UserName}
               currentUserName={this.props.currentUserName}
               token={this.props.token}
