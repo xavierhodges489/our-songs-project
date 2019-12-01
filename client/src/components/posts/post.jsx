@@ -70,10 +70,10 @@ class Post extends Component {
           </div>
           <div className="info">
             <div className="user-info">
-              <p className="username">
-                Posted by {this.props.UserName} <br></br>
-                {this.convertDate(this.props.PostDate)}
-              </p>
+              <div className="username-date">
+                <p className="username">Posted by {this.props.UserName}</p>
+                <p className="date">{this.convertDate(this.props.PostDate)}</p>
+              </div>
               <h2
                 className={
                   this.props.isViewingComments

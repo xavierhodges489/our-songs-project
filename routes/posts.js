@@ -5,7 +5,7 @@ const { poolPromise } = require("./db");
 router.route("/").get((req, res) => {
   poolPromise
     .then(pool => {
-      return pool.request().query("SELECT * FROM POSTS ORDER BY PostID DESC");
+      return pool.request().query("SELECT * FROM POSTS ORDER BY PostDate DESC");
     })
     .then(result => {
       res.json(result.recordset);
@@ -51,7 +51,7 @@ router.route("/page/:numPosts/:pageNumber").get((req, res) => {
       return pool.request().query(`
         SELECT PostID, PostDescription, PostSong, PostDate, UserName, Playlist, (SELECT COUNT(*) FROM COMMENTS WHERE COMMENTS.PostID = POSTS.PostID) as numComments
         FROM POSTS 
-        ORDER BY PostID DESC
+        ORDER BY PostDate DESC
         OFFSET ${req.params.pageNumber * req.params.numPosts} ROWS
         FETCH NEXT ${req.params.numPosts} ROWS ONLY
             `);

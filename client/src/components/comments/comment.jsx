@@ -83,10 +83,12 @@ class Comment extends Component {
           </div>
           <div className="info">
             <div className="user-info">
-              <p className="username">
-                Posted by {this.props.UserName} <br></br>
-                {this.convertDate(this.props.CommentDate)}
-              </p>
+              <div className="username-date">
+                <p className="username">Posted by {this.props.UserName}</p>
+                <p className="date">
+                  {this.convertDate(this.props.CommentDate)}
+                </p>
+              </div>
               <h2 className="description">{this.props.description}</h2>
             </div>
             <div className="meta">

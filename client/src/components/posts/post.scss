@@ -38,10 +38,18 @@
     flex-direction: column;
     justify-content: space-between;
 
-    .username {
+    .username-date {
       float: right;
-      width: 130px;
       text-align: right;
+
+      p {
+        margin: 0;
+      }
+
+      .date {
+        font-size: 0.85rem;
+        font-weight: 100;
+      }
     }
 
     .description {
