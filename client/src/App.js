@@ -34,7 +34,7 @@ class App extends Component {
       isWelcoming: false,
       isSigningUp: false,
       isLoggingIn: false,
-      isViewingPosts: true,
+      isViewingPosts: false,
       isViewingComments: false,
 
       commentsData: {
@@ -68,7 +68,8 @@ class App extends Component {
               isLoggedIn: true,
               isLoggedInWithSpotify: true,
               UserName: result.display_name,
-              spotifyUserID: result.id
+              spotifyUserID: result.id,
+              isViewingPosts: true
             });
           });
       });
