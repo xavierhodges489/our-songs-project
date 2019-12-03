@@ -57,7 +57,7 @@ class Post extends Component {
     Vibrant.from(this.state.trackAlbumArtUrl)
       .getPalette()
       .then(palette => {
-        document.body.style.background = `linear-gradient(-30deg, ${palette.Vibrant.hex}, #ffffff)`;
+        document.body.style.background = `linear-gradient(-30deg, ${palette.LightMuted.hex}, #ffffff)`;
       });
   };
 
