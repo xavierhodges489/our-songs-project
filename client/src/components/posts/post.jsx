@@ -57,7 +57,7 @@ class Post extends Component {
     Vibrant.from(this.state.trackAlbumArtUrl)
       .getPalette()
       .then(palette => {
-        document.body.style.background = `linear-gradient(-30deg, ${palette.LightMuted.hex}, #ffffff)`;
+        document.body.style.background = `linear-gradient(-30deg, ${palette.LightVibrant.hex}, #ffffff)`;
       });
   };
 
@@ -143,17 +143,28 @@ class Post extends Component {
             )}
           </div>
         </div>
-        {this.state.displayWidget && (
-          <iframe
-            src={`https://open.spotify.com/embed/track/${this.props.song}`}
-            title={this.props.song}
-            width="100%"
-            height="80"
-            frameBorder="0"
-            allowtransparency="true"
-            allow="encrypted-media"
-          ></iframe>
-        )}
+        {this.state.displayWidget &&
+          (!this.props.Playlist ? (
+            <iframe
+              src={`https://open.spotify.com/embed/track/${this.props.song}`}
+              title={this.props.song}
+              width="100%"
+              height="80"
+              frameBorder="0"
+              allowtransparency="true"
+              allow="encrypted-media"
+            ></iframe>
+          ) : (
+            <iframe
+              src={`https://open.spotify.com/embed/playlist/${this.props.Playlist}`}
+              title={this.props.Playlist}
+              width="100%"
+              height="280"
+              frameBorder="0"
+              allowtransparency="true"
+              allow="encrypted-media"
+            ></iframe>
+          ))}
       </div>
     );
   }
