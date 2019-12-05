@@ -65,7 +65,8 @@ class LogIn extends Component {
   }
 
   handleLogInWithSpotify = () => {
-    const client_id = "018eb308e675406b98d2e64a6bc3072c";
+    //client id goes here
+    const client_id = "client";
     const scope = "playlist-modify-public";
     const redirect_uri = "https://oursongs.herokuapp.com/";
     const state = this.generateRandomString(16);

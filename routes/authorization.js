@@ -10,11 +10,8 @@ router.route("/").get((req, res) => {
     },
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      Authorization:
-        "Basic " +
-        Buffer.from(
-          "018eb308e675406b98d2e64a6bc3072c:4a79b14aa04e46b186764f33c844b30d"
-        ).toString("base64")
+      //client and secret keys go here
+      Authorization: "Basic " + Buffer.from("client:secret").toString("base64")
     },
     json: true
   };
