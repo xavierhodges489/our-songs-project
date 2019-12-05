@@ -1,9 +1,9 @@
 const sql = require("mssql");
 
 const config = {
-  user: "admin",
-  password: "mypassword",
-  server: "databasesystemsproject.cy9rjwfchpnj.us-east-1.rds.amazonaws.com",
+  user: process.env.DATABASE_PASSWORD,
+  password: process.env.DATABASE_PASSWORD,
+  server: process.env.DATABASE_URI,
   port: 1433,
   database: "DistWeb"
 };

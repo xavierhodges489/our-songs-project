@@ -11,7 +11,11 @@ router.route("/").get((req, res) => {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       //client and secret keys go here
-      Authorization: "Basic " + Buffer.from("client:secret").toString("base64")
+      Authorization:
+        "Basic " +
+        Buffer.from(
+          `${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`
+        ).toString("base64")
     },
     json: true
   };
