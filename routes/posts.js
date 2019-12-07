@@ -50,13 +50,17 @@ router.route("/:id").get((req, res) => {
 router.route("/page/:numPosts/:pageNumber").get((req, res) => {
   poolPromise
     .then(pool => {
-      return pool.request().query(`
-        SELECT PostID, PostDescription, PostSong, PostDate, UserName, Playlist, (SELECT COUNT(*) FROM COMMENTS WHERE COMMENTS.PostID = POSTS.PostID) as numComments
-        FROM POSTS 
-        ORDER BY PostDate DESC
-        OFFSET ${req.params.pageNumber * req.params.numPosts} ROWS
-        FETCH NEXT ${req.params.numPosts} ROWS ONLY
-            `);
+      return pool
+        .request()
+        .input("offset", sql.Int, req.params.pageNumber * req.params.numPosts)
+        .input("numPosts", sql.Int, req.params.numPosts)
+        .query(
+          `SELECT PostID, PostDescription, PostSong, PostDate, UserName, Playlist, (SELECT COUNT(*) FROM COMMENTS WHERE COMMENTS.PostID = POSTS.PostID) as numComments
+          FROM POSTS 
+          ORDER BY PostDate DESC
+          OFFSET @offset ROWS
+          FETCH NEXT @numPosts ROWS ONLY`
+        );
     })
     .then(result => {
       res.json(result.recordset);

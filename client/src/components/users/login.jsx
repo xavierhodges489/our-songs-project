@@ -54,43 +54,18 @@ class LogIn extends Component {
     }
   };
 
-  generateRandomString(length) {
-    var text = "";
-    var possible =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (var i = 0; i < length; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
-  }
-
-  handleLogInWithSpotify = () => {
-    const client_id = "018eb308e675406b98d2e64a6bc3072c";
-    const scope = "playlist-modify-public";
-    const redirect_uri = "https://oursongs.herokuapp.com/";
-    const state = this.generateRandomString(16);
-
-    let url = "https://accounts.spotify.com/authorize";
-    url += "?response_type=token";
-    url += "&client_id=" + encodeURIComponent(client_id);
-    url += "&scope=" + encodeURIComponent(scope);
-    url += "&redirect_uri=" + encodeURIComponent(redirect_uri);
-    url += "&state=" + encodeURIComponent(state);
-    window.location = url;
-  };
-
   render() {
     return (
       <div className="log-in">
         <h2>Log In</h2>
         <div className="log-in-container">
           <div>
-            <button
+            <a
               className="btn btn-primary btn-green"
-              onClick={this.handleLogInWithSpotify}
+              href="/api/token/loginwithspotify"
             >
-              Log In With Spotify
-            </button>
+              Login With Spotify
+            </a>
           </div>
           <div className="divider">
             <div className="line"></div>
