@@ -2,7 +2,7 @@
 
 This is a website for sharing and discussing songs via Spotify and for creating playlists.
 
-[Go to website](https://oursongs.herokuapp.com/)
+[Visit website](https://oursongs.herokuapp.com/)
 
 ## To run:
 
