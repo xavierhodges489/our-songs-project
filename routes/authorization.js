@@ -6,7 +6,7 @@ router.route("/").get((req, res) => {
   const authOptions = {
     url: "https://accounts.spotify.com/api/token",
     form: {
-      grant_type: "client_credentials"
+      grant_type: "client_credentials",
     },
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -15,9 +15,9 @@ router.route("/").get((req, res) => {
         "Basic " +
         Buffer.from(
           `${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`
-        ).toString("base64")
+        ).toString("base64"),
     },
-    json: true
+    json: true,
   };
 
   request.post(authOptions, (error, response, body) => {
@@ -35,7 +35,7 @@ function generateRandomString(length) {
   return text;
 }
 
-router.route("/loginwithspotify").get((req, res) => {
+router.route("/loginwithspotify").post((req, res) => {
   const client_id = process.env.CLIENT_ID;
   const scope = "playlist-modify-public";
   const redirect_uri = "https://oursongs.herokuapp.com/";
@@ -48,7 +48,7 @@ router.route("/loginwithspotify").get((req, res) => {
   url += "&redirect_uri=" + encodeURIComponent(redirect_uri);
   url += "&state=" + encodeURIComponent(state);
 
-  res.redirect(url);
+  res.json({ url });
 });
 
 module.exports = router;

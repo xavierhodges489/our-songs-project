@@ -9,16 +9,16 @@ class LogIn extends Component {
       badUserNameMessage: "",
       badPassWordMessage: "",
       username: "",
-      password: ""
+      password: "",
     };
   }
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     if (this.state.username === "" && this.state.password === "") {
       this.setState({
         badUserNameMessage: "Must have a username",
-        badPassWordMessage: "Must have a password"
+        badPassWordMessage: "Must have a password",
       });
     } else if (this.state.username === "") {
       this.setState({ badUserNameMessage: "Must have a username" });
@@ -28,30 +28,48 @@ class LogIn extends Component {
       fetch("/api/users/login", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           UserName: e.target[0].value,
-          Password: e.target[1].value
-        })
+          Password: e.target[1].value,
+        }),
       })
-        .then(res => {
+        .then((res) => {
           if (res.status === 200) return res.json();
           else {
             this.setState({
-              badLogInMessage: "Incorrect Login"
+              badLogInMessage: "Incorrect Login",
             });
             return Promise.reject();
           }
         })
-        .then(result => {
+        .then((result) => {
           console.log(result);
           this.props.handleLogIn(result[0].UserName);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     }
+  };
+
+  handleLoginWithSpotify = (e) => {
+    e.preventDefault();
+    fetch("/api/token/loginwithspotify", { method: "POST" })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) return res.json();
+        else {
+          return Promise.reject();
+        }
+      })
+      .then((result) => {
+        window.location.href = result.url;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   render() {
@@ -60,12 +78,12 @@ class LogIn extends Component {
         <h2>Log In</h2>
         <div className="log-in-container">
           <div>
-            <a
+            <button
               className="btn btn-primary btn-green"
-              href="/api/token/loginwithspotify"
+              onClick={this.handleLoginWithSpotify}
             >
               Login With Spotify
-            </a>
+            </button>
           </div>
           <div className="divider">
             <div className="line"></div>
@@ -79,11 +97,11 @@ class LogIn extends Component {
               </label>
               <input
                 value={this.state.username}
-                onChange={e => {
+                onChange={(e) => {
                   this.setState({
                     username: e.target.value,
                     badUserNameMessage: "",
-                    badLogInMessage: ""
+                    badLogInMessage: "",
                   });
                 }}
                 className={
@@ -106,11 +124,11 @@ class LogIn extends Component {
               </label>
               <input
                 value={this.state.password}
-                onChange={e => {
+                onChange={(e) => {
                   this.setState({
                     password: e.target.value,
                     badPassWordMessage: "",
-                    badLogInMessage: ""
+                    badLogInMessage: "",
                   });
                 }}
                 className={
